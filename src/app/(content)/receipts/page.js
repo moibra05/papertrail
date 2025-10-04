@@ -1,6 +1,6 @@
+"use client"
+
 import React, { useState, useEffect } from "react";
-import { Receipt } from "@/entities/Receipt";
-import { Folder as FolderEntity } from "@/entities/Folder";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,9 +9,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-import ReceiptCard from "../components/receipts/ReceiptCard";
-import ReceiptListItem from "../components/receipts/ReceiptListItem";
-import ReceiptDetailsModal from "../components/receipts/ReceiptDetailsModal";
+import ReceiptCard from "@/app/components/reciepts/ReceiptCard";
+import ReceiptDetailsModal from "@/app/components/reciepts/ReceiptDetailsModal";
+import ReceiptListItem from "@/app/components/reciepts/ReceiptListItem";
 
 export default function ReceiptsPage() {
   const [receipts, setReceipts] = useState([]);
