@@ -66,7 +66,6 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
     notes: extractedData?.notes || "",
     tags: extractedData?.tags || [],
     folder_id: extractedData?.folder_id || "",
-    file_url: extractedData?.file_url || "",
   });
 
   const [folders, setFolders] = React.useState([]);
