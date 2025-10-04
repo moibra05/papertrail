@@ -130,7 +130,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => fileInputRef.current?.click()}
-              className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 shadow-lg text-white"
+              className="bg-blue-600 hover:bg-blue-700 shadow-lg text-white"
             >
               <FileText className="w-4 h-4 mr-2 text-white" />
               Browse Files
