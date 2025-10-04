@@ -56,15 +56,15 @@ export default function RootLayout({ children }) {
           --accent-foreground: 0 0% 100%;
         }
       `}</style>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
-        <Sidebar className="border-r border-indigo-100/50 bg-white/80 backdrop-blur-xl">
-          <SidebarHeader className="border-b border-indigo-100/50 p-6">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-blue-50 to-blue-50">
+        <Sidebar className="border-r border-blue-100/50 bg-white/80 backdrop-blur-xl">
+          <SidebarHeader className="border-b border-blue-100/50 p-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-300 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <Receipt className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h2 className="font-bold text-xl bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
                   PaperTrail
                 </h2>
                 <p className="text-xs text-slate-500 font-medium">
@@ -85,7 +85,7 @@ export default function RootLayout({ children }) {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        className={`hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 rounded-xl mb-1`}
+                        className={`hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 rounded-xl mb-1`}
                       >
                         <Link
                           href={item.url}
