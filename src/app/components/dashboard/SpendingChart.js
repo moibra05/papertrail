@@ -31,7 +31,7 @@ export default function SpendingChart({ receipts }) {
 
   return (
     <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-      <CardHeader className="border-b border-indigo-100/50">
+      <CardHeader className="border-b border-indigo-100/50 bg-slate-50/50 -mx-6 px-6 -mt-6 pt-6 mb-6">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-bold text-slate-900">{getCurrentTitle()}</CardTitle>
           <div className="relative">
