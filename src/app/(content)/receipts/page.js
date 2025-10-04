@@ -82,7 +82,7 @@ export default function ReceiptsPage() {
   };
 
   return (
-    <div className="p-4 md:p-8 min-h-screen">
+  <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-7xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
