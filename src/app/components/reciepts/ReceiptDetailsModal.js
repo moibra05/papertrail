@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { ExternalLink, Calendar, CreditCard, Tag, FileText, Trash2 } from "lucide-react";
-import { Receipt } from "@/entities/Receipt";
+// import { Receipt } from "@/entities/Receipt";
 import {
   Table,
   TableBody,

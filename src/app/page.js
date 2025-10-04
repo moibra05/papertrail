@@ -1,14 +1,14 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import { Receipt as ReceiptEntity } from "@/entities/Receipt";
+// import { Receipt as ReceiptEntity } from "@/entities/Receipt";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { Plus, Receipt, DollarSign, TrendingUp, Calendar } from "lucide-react";
 
-import StatsCard from "./components/dashboard/StatsCard";
+import StatsCard from "./components/dashboard/StatCards";
 import RecentReceipts from "./components/dashboard/RecentReceipts";
 import SpendingChart from "./components/dashboard/SpendingChart";
-import ReceiptDetailsModal from "./components/receipts/ReceiptDetailsModal";
+import ReceiptDetailsModal from "./components/reciepts/ReceiptDetailsModal";
 
 export default function Home() {
   const [receipts, setReceipts] = useState([]);
@@ -55,12 +55,12 @@ export default function Home() {
             </h1>
             <p className="text-slate-600">Manage your receipts and track expenses effortlessly</p>
           </div>
-          <Link to={createPageUrl("Upload")}>
+          {/* <Link to={createPageUrl("Upload")}>
             <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg">
               <Plus className="w-5 h-5 mr-2" />
               Upload Receipt
             </Button>
-          </Link>
+          </Link> */}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
