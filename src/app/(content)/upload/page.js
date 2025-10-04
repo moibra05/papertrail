@@ -100,10 +100,10 @@ export default function UploadPage() {
   <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
             Upload Receipt
           </h1>
-          <p className="text-slate-600">
+          <p className="text-muted">
             Scan or upload your receipts to automatically extract expense data
           </p>
         </div>
@@ -124,7 +124,7 @@ export default function UploadPage() {
 
         {processing && !extractedData && (
           <div className="space-y-2">
-            <div className="flex justify-between text-sm text-slate-600">
+            <div className="flex justify-between text-sm text-muted">
               <span>Processing receipt...</span>
               <span>{progress}%</span>
             </div>
@@ -135,7 +135,7 @@ export default function UploadPage() {
         {!extractedData ? (
           <div className="flex flex-col gap-5">
             <div>
-            <Card className="p-6">
+            <Card className="p-6 bg-surface">
               <h3 className="font-semibold">How it works</h3>
               <div className="space-y-4">
                 <div className="flex gap-3">
@@ -144,7 +144,7 @@ export default function UploadPage() {
                   </div>
                   <div>
                     <h4 className="font-medium">1. Upload Receipt</h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted">
                       Drag and drop or select receipt images and PDFs
                     </p>
                   </div>
@@ -156,7 +156,7 @@ export default function UploadPage() {
                   </div>
                   <div>
                     <h4 className="font-medium">2. AI Processing</h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted">
                       OCR extracts merchant, date, amount, and category
                     </p>
                   </div>
@@ -168,7 +168,7 @@ export default function UploadPage() {
                   </div>
                   <div>
                     <h4 className="font-medium">3. Review & Save</h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted">
                       Verify extracted data and organize into folders
                     </p>
                   </div>

@@ -113,7 +113,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
 
   if (showCamera) {
     return (
-      <Card className="border-2 border-blue-200 bg-white/80 backdrop-blur-sm shadow-xl">
+      <Card className="border-2 border-blue-200 bg-surface backdrop-blur-sm shadow-xl">
         <div className="p-6">
           <video
             ref={videoRef}
@@ -125,7 +125,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           <div className="flex gap-3 mt-4">
             <Button
               onClick={capturePhoto}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-lg dark:shadow-gray-500/10"
             >
               <Camera className="w-4 h-4 mr-2 text-white" />
               Capture
@@ -145,8 +145,8 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
         className={`border-2 transition-all duration-300 ${
           dragActive
             ? "border-blue-500 bg-blue-50"
-            : "border-slate-200 bg-white/80 hover:border-blue-300"
-        } backdrop-blur-sm shadow-lg`}
+            : "border-subtle bg-surface hover:border-blue-300"
+        } backdrop-blur-sm shadow-lg dark:shadow-gray-500/10`}
         onDragEnter={onDrag}
         onDragLeave={onDrag}
         onDragOver={onDrag}
@@ -168,11 +168,9 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           >
             <Upload className="w-10 h-10 text-white" />
           </motion.div>
-
-          <h3 className="text-2xl font-bold text-slate-900 mb-2">
-            Upload Receipt
-          </h3>
-          <p className="text-slate-500 mb-6">
+          
+          <h3 className="text-2xl font-bold text-foreground mb-2">Upload Receipt</h3>
+          <p className="text-muted mb-6">
             Drag and drop your receipt here, or click to browse
           </p>
 
@@ -188,7 +186,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => fileInputRef.current?.click()}
-              className="bg-blue-600 hover:bg-blue-700 shadow-lg text-white"
+              className="bg-blue-600 hover:bg-blue-700 shadow-lg dark:shadow-gray-500/10 text-white"
             >
               <FileText className="w-4 h-4 mr-2 text-white" />
               Browse Files
@@ -203,7 +201,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
             </Button>
           </div>
 
-          <p className="text-xs text-slate-400 mt-6">
+          <p className="text-xs text-muted mt-6">
             Supports: JPG, PNG, PDF • Max 10MB per file
           </p>
         </div>
