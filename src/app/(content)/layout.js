@@ -64,7 +64,7 @@ export default function RootLayout({ children }) {
                 <Receipt className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="font-bold text-xl bg-blue-600 bg-clip-text text-transparent">
+                <h2 className="font-bold text-xl bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
                   PaperTrail
                 </h2>
                 <p className="text-xs text-slate-500 font-medium">
