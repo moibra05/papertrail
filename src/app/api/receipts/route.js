@@ -1,4 +1,4 @@
-import { handleUpload, getParts } from "@/utils/ocr";
+import { getReceiptData } from "@/utils/ocr";
 
 export const config = {
     api: {
@@ -15,7 +15,7 @@ export async function POST(request) {
           return Response.json({ error: 'No file provided' }, { status: 400 });
         }
         
-        const data = await handleUpload(file);
+        const data = await getReceiptData(file);
         
         return Response.json(data);
       } catch (error) {
