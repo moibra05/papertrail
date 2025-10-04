@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 // import { UploadFile, ExtractDataFromUploadedFile } from "@/integrations/Core";
@@ -36,7 +36,7 @@ export default function UploadPage() {
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    if (!file.type.match(/image.*/) && file.type !== 'application/pdf') {
+    if (!file.type.match(/image.*/) && file.type !== "application/pdf") {
       setError("Please upload an image or PDF file");
       return;
     }
@@ -46,7 +46,7 @@ export default function UploadPage() {
 
     try {
       const progressInterval = setInterval(() => {
-        setProgress(prev => Math.min(prev + 10, 80));
+        setProgress((prev) => Math.min(prev + 10, 80));
       }, 200);
 
       const { file_url } = await UploadFile({ file });
@@ -54,7 +54,7 @@ export default function UploadPage() {
 
       const result = await ExtractDataFromUploadedFile({
         file_url,
-        json_schema: Receipt.schema()
+        json_schema: Receipt.schema(),
       });
 
       clearInterval(progressInterval);
@@ -63,7 +63,7 @@ export default function UploadPage() {
       if (result.status === "success" && result.output) {
         setExtractedData({
           ...result.output,
-          file_url
+          file_url,
         });
       } else {
         throw new Error("Could not extract data from receipt");

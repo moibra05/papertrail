@@ -8,7 +8,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { ExternalLink, Calendar, CreditCard, Tag, FileText, Trash2 } from "lucide-react";
+import {
+  ExternalLink,
+  Calendar,
+  CreditCard,
+  Tag,
+  FileText,
+  Trash2,
+} from "lucide-react";
 // import { Receipt } from "@/entities/Receipt";
 import {
   Table,
@@ -19,7 +26,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export default function ReceiptDetailsModal({ receipt, open, onClose, onDelete }) {
+export default function ReceiptDetailsModal({
+  receipt,
+  open,
+  onClose,
+  onDelete,
+}) {
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   const handleDelete = async () => {
@@ -116,8 +128,11 @@ export default function ReceiptDetailsModal({ receipt, open, onClose, onDelete }
               Categories & Tags
             </h3>
             <div className="flex flex-wrap gap-2">
-              <Badge variant="outline" className="border-indigo-200 text-indigo-700">
-                {receipt.category?.replace(/_/g, ' ')}
+              <Badge
+                variant="outline"
+                className="border-indigo-200 text-indigo-700"
+              >
+                {receipt.category?.replace(/_/g, " ")}
               </Badge>
               {receipt.tags && receipt.tags.map((tag, i) => (
                 <Badge key={i} variant="outline" className="border-subtle">
@@ -146,9 +161,15 @@ export default function ReceiptDetailsModal({ receipt, open, onClose, onDelete }
                   <TableBody>
                     {receipt.items.map((item, i) => (
                       <TableRow key={i}>
-                        <TableCell className="font-medium">{item.description}</TableCell>
-                        <TableCell className="text-right">{item.quantity}</TableCell>
-                        <TableCell className="text-right">${item.unit_price?.toFixed(2)}</TableCell>
+                        <TableCell className="font-medium">
+                          {item.description}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {item.quantity}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          ${item.unit_price?.toFixed(2)}
+                        </TableCell>
                         <TableCell className="text-right font-semibold">
                           ${item.total?.toFixed(2)}
                         </TableCell>

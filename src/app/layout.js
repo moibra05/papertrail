@@ -1,4 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
+import UserProvider from "../providers/UserProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,10 +21,19 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          src="https://kit.fontawesome.com/085e09a5e6.js"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <UserProvider>
+          {children}
+          <Toaster position="top-right" richColors />
+        </UserProvider>
       </body>
     </html>
   );

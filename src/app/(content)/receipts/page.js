@@ -1,10 +1,24 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, LayoutGrid, List, ChevronDown, ChevronRight, FolderOpen, FileText } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Search,
+  LayoutGrid,
+  List,
+  ChevronDown,
+  ChevronRight,
+  FolderOpen,
+  FileText,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,32 +46,34 @@ export default function ReceiptsPage() {
     setIsLoading(true);
     const [receiptsData, foldersData] = await Promise.all([
       Receipt.list("-created_date"),
-      FolderEntity.list("-created_date")
+      FolderEntity.list("-created_date"),
     ]);
     setReceipts(receiptsData);
     setFolders(foldersData);
-    
+
     const expanded = {};
-    foldersData.forEach(f => expanded[f.id] = true);
-    expanded['no-folder'] = true;
+    foldersData.forEach((f) => (expanded[f.id] = true));
+    expanded["no-folder"] = true;
     setExpandedFolders(expanded);
-    
+
     setIsLoading(false);
   };
 
   const toggleFolder = (folderId) => {
-    setExpandedFolders(prev => ({
+    setExpandedFolders((prev) => ({
       ...prev,
-      [folderId]: !prev[folderId]
+      [folderId]: !prev[folderId],
     }));
   };
 
   const filterReceipts = (receipts) => {
     return receipts
-      .filter(r => {
-        const matchesSearch = r.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             r.notes?.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = categoryFilter === "all" || r.category === categoryFilter;
+      .filter((r) => {
+        const matchesSearch =
+          r.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          r.notes?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory =
+          categoryFilter === "all" || r.category === categoryFilter;
         return matchesSearch && matchesCategory;
       })
       .sort((a, b) => {
@@ -70,11 +86,11 @@ export default function ReceiptsPage() {
   };
 
   const getReceiptsForFolder = (folderId) => {
-    return filterReceipts(receipts.filter(r => r.folder_id === folderId));
+    return filterReceipts(receipts.filter((r) => r.folder_id === folderId));
   };
 
   const getReceiptsWithoutFolder = () => {
-    return filterReceipts(receipts.filter(r => !r.folder_id));
+    return filterReceipts(receipts.filter((r) => !r.folder_id));
   };
 
   const getTotalFilteredReceipts = () => {
@@ -105,7 +121,7 @@ export default function ReceiptsPage() {
                   className="pl-10 border-subtle"
                 />
               </div>
-              
+
               <div className="flex gap-2">
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                   <SelectTrigger className="w-full md:w-40 border-subtle bg-surface">
@@ -115,7 +131,9 @@ export default function ReceiptsPage() {
                     <SelectItem value="all">All Categories</SelectItem>
                     <SelectItem value="food_dining">Food & Dining</SelectItem>
                     <SelectItem value="groceries">Groceries</SelectItem>
-                    <SelectItem value="transportation">Transportation</SelectItem>
+                    <SelectItem value="transportation">
+                      Transportation
+                    </SelectItem>
                     <SelectItem value="utilities">Utilities</SelectItem>
                     <SelectItem value="healthcare">Healthcare</SelectItem>
                     <SelectItem value="entertainment">Entertainment</SelectItem>
@@ -167,10 +185,10 @@ export default function ReceiptsPage() {
         </Card>
 
         <div className="space-y-4">
-          {folders.map(folder => {
+          {folders.map((folder) => {
             const folderReceipts = getReceiptsForFolder(folder.id);
             if (folderReceipts.length === 0) return null;
-            
+
             return (
               <Card key={folder.id} className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden">
                 <div
@@ -191,7 +209,7 @@ export default function ReceiptsPage() {
                   >
                     <FolderOpen className="w-5 h-5 text-white" />
                   </div>
-                  
+
                   <div className="flex-1">
                     <h3 className="font-bold text-foreground">{folder.name}</h3>
                     <p className="text-sm text-muted">{folderReceipts.length} receipts</p>
@@ -222,7 +240,7 @@ export default function ReceiptsPage() {
                         </div>
                       ) : (
                         <div className="divide-y divide-slate-100">
-                          {folderReceipts.map(receipt => (
+                          {folderReceipts.map((receipt) => (
                             <ReceiptListItem
                               key={receipt.id}
                               receipt={receipt}
@@ -255,7 +273,7 @@ export default function ReceiptsPage() {
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md dark:shadow-gray-500/10 bg-slate-400">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
-                
+
                 <div className="flex-1">
                   <h3 className="font-bold text-foreground">Uncategorized</h3>
                   <p className="text-sm text-muted">{getReceiptsWithoutFolder().length} receipts</p>
@@ -267,7 +285,7 @@ export default function ReceiptsPage() {
               </div>
 
               <AnimatePresence>
-                {expandedFolders['no-folder'] && (
+                {expandedFolders["no-folder"] && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
@@ -286,7 +304,7 @@ export default function ReceiptsPage() {
                       </div>
                     ) : (
                       <div className="divide-y divide-slate-100">
-                        {getReceiptsWithoutFolder().map(receipt => (
+                        {getReceiptsWithoutFolder().map((receipt) => (
                           <ReceiptListItem
                             key={receipt.id}
                             receipt={receipt}
