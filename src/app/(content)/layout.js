@@ -6,10 +6,6 @@ export default function RootLayout({ children }) {
     <SidebarProvider>
       <style>{`
         :root {
-          --primary: 239 84% 67%;
-          --primary-foreground: 0 0% 100%;
-          --accent: 262 83% 58%;
-          --accent-foreground: 0 0% 100%;
         }
       `}</style>
       <div className="min-h-screen flex w-full bg-app">
