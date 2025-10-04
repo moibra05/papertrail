@@ -23,6 +23,7 @@ export function UserProvider({ children }) {
         .select("*")
         .eq("user", userId)
         .order("created_at", { ascending: false });
+
       if (!r.error) setReceipts(r.data || []);
     } catch (e) {
       console.error("Error loading user data:", e);
@@ -44,6 +45,7 @@ export function UserProvider({ children }) {
         setLoading(false);
         return;
       }
+
       setUser(data?.user ?? null);
       if (data?.user?.id) await loadAll(data.user.id);
     }

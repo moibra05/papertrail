@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { FolderOpen, MoreVertical, Edit2, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -10,65 +11,80 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function FolderCard({ folder, receiptCount, onEdit, onDelete, index }) {
+export default function FolderCard({
+  folder,
+  receiptCount,
+  subfolderCount,
+  onEdit,
+  onDelete,
+  index,
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
     >
-      <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl hover:scale-101 cursor-pointer transition-all duration-300 min-w-0 pt-0 h-full">
+      <Link
+        href={`/folders/${folder.id}`}
+      >
         <div
           className="h-3 rounded-t-xl"
           style={{ backgroundColor: folder.color }}
         />
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
+          <CardHeader className="pb-3 pt-4 min-w-0">
+            <div className="flex items-start justify-between min-w-0 gap-3">
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center shadow-md"
                 style={{ backgroundColor: folder.color }}
               >
                 <FolderOpen className="w-6 h-6 text-white" />
               </div>
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-lg font-bold text-slate-900 truncate">
+              <div className="flex-1 min-w-0 overflow-hidden">
+                <CardTitle
+                  className="text-base font-bold text-foreground truncate w-full overflow-hidden whitespace-nowrap"
+                  title={folder.name}
+                >
                   {folder.name}
                 </CardTitle>
                 <p className="text-sm text-slate-500">
                   {receiptCount} receipts
+                  {typeof subfolderCount === "number" && (
+                    <span className="ml-2">· {subfolderCount} subfolders</span>
+                  )}
                 </p>
               </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreVertical className="w-4 h-4 text-slate-400" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onEdit(folder)}>
+                    <Edit2 className="w-4 h-4 mr-2" />
+                    Edit Folder
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => onDelete(folder.id)}
+                    className="text-red-600"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete Folder
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVertical className="w-4 h-4 text-slate-400" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => onEdit(folder)}>
-                  <Edit2 className="w-4 h-4 mr-2" />
-                  Edit Folder
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => onDelete(folder.id)}
-                  className="text-red-600"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete Folder
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </CardHeader>
-        {folder.description && (
-          <CardContent>
-            <p className="text-sm text-slate-600 line-clamp-2">
-              {folder.description}
-            </p>
-          </CardContent>
-        )}
+          </CardHeader>
+          {folder.description && (
+            <CardContent>
+              <p className="text-sm text-slate-600 line-clamp-2">
+                {folder.description}
+              </p>
+            </CardContent>
+          )}
+        </Link>
       </Card>
     </motion.div>
   );

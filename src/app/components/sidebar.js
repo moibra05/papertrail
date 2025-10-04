@@ -6,6 +6,8 @@ import {
   Receipt,
   BarChart3,
   LogOut,
+  FolderOpen,
+  FolderClosed,
 } from "lucide-react";
 import {
   Sidebar,
@@ -22,6 +24,8 @@ import {
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserClient } from "@/providers/UserProvider";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const navigationItems = [
   {
@@ -35,22 +39,26 @@ const navigationItems = [
     icon: Upload,
   },
   {
+    title: "Analytics",
+    url: "/analytics",
+    icon: BarChart3,
+  },
+  {
     title: "All Receipts",
     url: "/receipts",
     icon: Receipt,
   },
   {
-    title: "Analytics",
-    url: "/analytics",
-    icon: BarChart3,
+    title: "Folders",
+    url: "/folders",
+    icon: FolderClosed,
   },
 ];
 
 export default function SidebarComponent() {
   const { signOut } = useAuth();
   const { user } = useUserClient();
-
-  console.log("User in Sidebar:", user);
+  const pathname = usePathname();
 
   return (
     <Sidebar className="border-r border-indigo-100/50 bg-white/80 backdrop-blur-xl">
@@ -81,13 +89,22 @@ export default function SidebarComponent() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className={`hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 rounded-xl mb-1`}
+                    className={cn(
+                      "hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 rounded-xl mb-1",
+                      pathname === item.url
+                        ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/30"
+                        : ""
+                    )}
                   >
                     <Link
                       href={item.url}
                       className="flex items-center gap-3 px-4 py-3"
                     >
-                      <item.icon className="w-5 h-5" />
+                      {pathname === "/folders" && item.title === "Folders" ? (
+                        <FolderOpen className="w-5 h-5" />
+                      ) : (
+                        <item.icon className="w-5 h-5" />
+                      )}
                       <span className="font-medium">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>

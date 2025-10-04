@@ -95,7 +95,7 @@ export default function ReceiptDetailsModal({
                   <div>
                     <p className="text-xs text-slate-500">Date</p>
                     <p className="font-medium text-slate-700">
-                      {format(new Date(receipt.date), "MMMM d, yyyy")}
+                      {format(new Date(receipt.created_at), "MMMM d, yyyy")}
                     </p>
                   </div>
                 </div>

@@ -17,11 +17,13 @@ import {
   ChevronDown,
   ChevronRight,
   FolderOpen,
+  FolderClosed,
   FileText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useUserClient } from "@/providers/UserProvider";
 
 import ReceiptCard from "@/app/components/reciepts/ReceiptCard";
 import ReceiptDetailsModal from "@/app/components/reciepts/ReceiptDetailsModal";
@@ -37,27 +39,12 @@ export default function ReceiptsPage() {
   const [dateSort, setDateSort] = useState("newest");
   const [viewMode, setViewMode] = useState("grid");
   const [expandedFolders, setExpandedFolders] = useState({});
+  const userClient = useUserClient();
 
   useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    const [receiptsData, foldersData] = await Promise.all([
-      Receipt.list("-created_date"),
-      FolderEntity.list("-created_date"),
-    ]);
-    setReceipts(receiptsData);
-    setFolders(foldersData);
-
-    const expanded = {};
-    foldersData.forEach((f) => (expanded[f.id] = true));
-    expanded["no-folder"] = true;
-    setExpandedFolders(expanded);
-
-    setIsLoading(false);
-  };
+    setReceipts(userClient.receipts);
+    setFolders(userClient.folders);
+  }, [userClient]);
 
   const toggleFolder = (folderId) => {
     setExpandedFolders((prev) => ({
@@ -98,7 +85,7 @@ export default function ReceiptsPage() {
   };
 
   return (
-  <div className="p-4 md:p-8 min-h-full">
+    <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-7xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
@@ -109,7 +96,7 @@ export default function ReceiptsPage() {
           </p>
         </div>
 
-        <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg p-4 md:p-6">
+        <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg p-4 md:p-6 ">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1 relative">
@@ -196,7 +183,7 @@ export default function ReceiptsPage() {
             return (
               <Card
                 key={folder.id}
-                className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden"
+                className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden py-0 gap-0"
               >
                 <div
                   className="flex items-center gap-3 p-4 cursor-pointer hover:bg-slate-50 transition-colors"
@@ -214,7 +201,11 @@ export default function ReceiptsPage() {
                     className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md"
                     style={{ backgroundColor: folder.color }}
                   >
-                    <FolderOpen className="w-5 h-5 text-white" />
+                    {expandedFolders[folder.id] ? (
+                      <FolderOpen className="w-5 h-5 text-white" />
+                    ) : (
+                      <FolderClosed className="w-5 h-5 text-white" />
+                    )}
                   </div>
 
                   <div className="flex-1">
@@ -269,7 +260,7 @@ export default function ReceiptsPage() {
           })}
 
           {getReceiptsWithoutFolder().length > 0 && (
-            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden">
+            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden p-0 gap-0">
               <div
                 className="flex items-center gap-3 p-4 cursor-pointer hover:bg-slate-50 transition-colors"
                 onClick={() => toggleFolder("no-folder")}
@@ -350,7 +341,7 @@ export default function ReceiptsPage() {
         receipt={selectedReceipt}
         open={!!selectedReceipt}
         onClose={() => setSelectedReceipt(null)}
-        onDelete={loadData}
+        onDelete={userClient.refresh}
       />
     </div>
   );
