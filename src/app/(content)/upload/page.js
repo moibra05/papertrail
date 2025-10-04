@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 // import { UploadFile, ExtractDataFromUploadedFile } from "@/integrations/Core";
+import { Card } from "@/components/ui/card";
+import { FileText, Image, FileCheck} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
@@ -95,14 +97,14 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="p-4 md:p-8 min-h-screen">
+  <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
             Upload Receipt
           </h1>
           <p className="text-slate-600">
-            Scan or upload your receipt and let AI extract the details
+            Scan or upload your receipts to automatically extract expense data
           </p>
         </div>
 
@@ -131,11 +133,58 @@ export default function UploadPage() {
         )}
 
         {!extractedData ? (
-          <UploadZone
-            onFileSelect={handleFileSelect}
-            dragActive={dragActive}
-            onDrag={handleDrag}
-          />
+          <div className="flex flex-col gap-5">
+            <div>
+            <Card className="p-6">
+              <h3 className="font-semibold">How it works</h3>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <FileText className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">1. Upload Receipt</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Drag and drop or select receipt images and PDFs
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Image className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">2. AI Processing</h4>
+                    <p className="text-sm text-muted-foreground">
+                      OCR extracts merchant, date, amount, and category
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <FileCheck className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">3. Review & Save</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Verify extracted data and organize into folders
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+            <div>
+              <UploadZone
+                onFileSelect={handleFileSelect}
+                dragActive={dragActive}
+                onDrag={handleDrag}
+              />
+            </div>
+        </div>
+          
         ) : (
           <ReceiptForm
             extractedData={extractedData}
