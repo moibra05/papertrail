@@ -12,9 +12,9 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' },
-        audio: false 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false,
       });
       streamRef.current = stream;
       setShowCamera(true);
@@ -26,12 +26,20 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
 
   const stopCamera = () => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
     if (videoRef.current) {
-      try { videoRef.current.pause(); } catch(e) { console.warn("Failed to pause video element:", e); }
-      try { videoRef.current.srcObject = null; } catch(e) { console.warn("Failed to clear video element srcObject:", e); }
+      try {
+        videoRef.current.pause();
+      } catch (e) {
+        console.warn("Failed to pause video element:", e);
+      }
+      try {
+        videoRef.current.srcObject = null;
+      } catch (e) {
+        console.warn("Failed to clear video element srcObject:", e);
+      }
     }
     setShowCamera(false);
   };
@@ -39,17 +47,23 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
   const capturePhoto = () => {
     if (!videoRef.current) return;
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(videoRef.current, 0, 0);
 
-    canvas.toBlob((blob) => {
-      const file = new File([blob], `receipt-${Date.now()}.jpg`, { type: 'image/jpeg' });
-      onFileSelect({ target: { files: [file] } });
-      stopCamera();
-    }, 'image/jpeg', 0.95);
+    canvas.toBlob(
+      (blob) => {
+        const file = new File([blob], `receipt-${Date.now()}.jpg`, {
+          type: "image/jpeg",
+        });
+        onFileSelect({ target: { files: [file] } });
+        stopCamera();
+      },
+      "image/jpeg",
+      0.95
+    );
   };
 
   React.useEffect(() => {
@@ -70,20 +84,30 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
       try {
         await v.play();
       } catch (playErr) {
-        console.warn('Video play() promise rejected (deferred):', playErr);
+        console.warn("Video play() promise rejected (deferred):", playErr);
         // As a fallback, wait for loadedmetadata and try again once
         const onLoaded = () => {
-          v.play().catch((e) => console.warn('play() failed after loadedmetadata:', e));
+          v.play().catch((e) =>
+            console.warn("play() failed after loadedmetadata:", e)
+          );
         };
-        v.addEventListener('loadedmetadata', onLoaded, { once: true });
+        v.addEventListener("loadedmetadata", onLoaded, { once: true });
       }
     };
 
     tryPlay();
 
     return () => {
-      try { v.pause(); } catch(e) { console.warn('Failed to pause video:', e); }
-      try { v.srcObject = null; } catch(e) { console.warn('Failed to clear video srcObject:', e); }
+      try {
+        v.pause();
+      } catch (e) {
+        console.warn("Failed to pause video:", e);
+      }
+      try {
+        v.srcObject = null;
+      } catch (e) {
+        console.warn("Failed to clear video srcObject:", e);
+      }
     };
   }, [showCamera]);
 
@@ -144,8 +168,10 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           >
             <Upload className="w-10 h-10 text-white" />
           </motion.div>
-          
-          <h3 className="text-2xl font-bold text-slate-900 mb-2">Upload Receipt</h3>
+
+          <h3 className="text-2xl font-bold text-slate-900 mb-2">
+            Upload Receipt
+          </h3>
           <p className="text-slate-500 mb-6">
             Drag and drop your receipt here, or click to browse
           </p>
