@@ -1,5 +1,6 @@
+"use client"
+
 import React, { useState, useEffect } from "react";
-import { Receipt } from "@/entities/Receipt";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {

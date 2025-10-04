@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { X, Plus, Save } from "lucide-react";
 import { motion } from "framer-motion";
-import { Folder } from "@/entities/Folder";
 import {
   Table,
   TableBody,

@@ -1,17 +1,15 @@
+"use client"
+
 import React, { useState } from "react";
-import { Receipt } from "@/entities/Receipt";
-import { UploadFile, ExtractDataFromUploadedFile } from "@/integrations/Core";
+// import { UploadFile, ExtractDataFromUploadedFile } from "@/integrations/Core";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { Progress } from "@/components/ui/progress";
 
-import UploadZone from "../components/upload/UploadZone";
-import ReceiptForm from "../components/upload/ReceiptForm";
+import UploadZone from "../../components/upload/UploadZone";
+import ReceiptForm from "../../components/upload/ReceiptForm";
 
 export default function UploadPage() {
-  const navigate = useNavigate();
   const [dragActive, setDragActive] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
