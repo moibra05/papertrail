@@ -30,8 +30,8 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
       streamRef.current = null;
     }
     if (videoRef.current) {
-      try { videoRef.current.pause(); } catch(e) {}
-      try { videoRef.current.srcObject = null; } catch(e) {}
+      try { videoRef.current.pause(); } catch(e) { console.warn("Failed to pause video element:", e); }
+      try { videoRef.current.srcObject = null; } catch(e) { console.warn("Failed to clear video element srcObject:", e); }
     }
     setShowCamera(false);
   };
@@ -82,8 +82,8 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
     tryPlay();
 
     return () => {
-      try { v.pause(); } catch(e) {}
-      try { v.srcObject = null; } catch(e) {}
+      try { v.pause(); } catch(e) { console.warn('Failed to pause video:', e); }
+      try { v.srcObject = null; } catch(e) { console.warn('Failed to clear video srcObject:', e); }
     };
   }, [showCamera]);
 
