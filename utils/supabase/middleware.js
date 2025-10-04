@@ -35,21 +35,45 @@ export async function updateSession(request) {
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-
   // uncomment when auth is setup
 
-  // const publicPaths = ["/", "/login", "/sign-up", "/forgot-password"];
+  const publicPaths = [
+    "/",
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/auth/callback",
+  ];
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // if (!user && !publicPaths.includes(request.nextUrl.pathname)) {
-  //   // no user, potentially respond by redirecting the user to the login page
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = "/login";
-  //   return NextResponse.redirect(url);
-  // }
+  // if the user is authenticated, prevent access to public auth routes
+
+  if (user && publicPaths.includes(request.nextUrl.pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    const redirectResponse = NextResponse.redirect(url);
+    try {
+      const allCookies = supabaseResponse.cookies.getAll();
+      allCookies.forEach(({ name, value, options }) =>
+        redirectResponse.cookies.set(name, value, options)
+      );
+    } catch (e) {
+      console.warn("Failed to copy cookies to redirect response", e);
+    }
+
+    return redirectResponse;
+  }
+
+  if (!user && !publicPaths.includes(request.nextUrl.pathname)) {
+    // no user, potentially respond by redirecting the user to the login page
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
