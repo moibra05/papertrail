@@ -9,6 +9,7 @@ import StatsCard from "../../components/dashboard/StatCards";
 import RecentReceipts from "../../components/dashboard/RecentReceipts";
 import SpendingChart from "../../components/dashboard/SpendingChart";
 import ReceiptDetailsModal from "../../components/reciepts/ReceiptDetailsModal";
+import Link from "next/link";
 
 export default function Home() {
   const [receipts, setReceipts] = useState([]);
@@ -34,7 +35,7 @@ export default function Home() {
     const thisMonth = new Date().getMonth();
     const thisYear = new Date().getFullYear();
     return receipts
-      .filter(r => {
+      .filter((r) => {
         const d = new Date(r.date);
         return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
       })
@@ -53,14 +54,16 @@ export default function Home() {
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
               Welcome to PaperTrail
             </h1>
-            <p className="text-slate-600">Manage your receipts and track expenses effortlessly</p>
+            <p className="text-slate-600">
+              Manage your receipts and track expenses effortlessly
+            </p>
           </div>
-          {/* <Link to={createPageUrl("Upload")}>
-            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg">
+          <Link href="/upload">
+            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg text-white">
               <Plus className="w-5 h-5 mr-2" />
               Upload Receipt
             </Button>
-          </Link> */}
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -81,7 +84,16 @@ export default function Home() {
             value={`$${getMonthlySpending().toFixed(2)}`}
             icon={Calendar}
             gradient="from-blue-500 to-cyan-500"
-            trend={receipts.length > 0 ? `${receipts.filter(r => new Date(r.date).getMonth() === new Date().getMonth()).length} receipts` : ''}
+            trend={
+              receipts.length > 0
+                ? `${
+                    receipts.filter(
+                      (r) =>
+                        new Date(r.date).getMonth() === new Date().getMonth()
+                    ).length
+                  } receipts`
+                : ""
+            }
           />
           <StatsCard
             title="Average per Receipt"

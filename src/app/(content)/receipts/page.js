@@ -1,10 +1,24 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, LayoutGrid, List, ChevronDown, ChevronRight, FolderOpen, FileText } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Search,
+  LayoutGrid,
+  List,
+  ChevronDown,
+  ChevronRight,
+  FolderOpen,
+  FileText,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,32 +46,34 @@ export default function ReceiptsPage() {
     setIsLoading(true);
     const [receiptsData, foldersData] = await Promise.all([
       Receipt.list("-created_date"),
-      FolderEntity.list("-created_date")
+      FolderEntity.list("-created_date"),
     ]);
     setReceipts(receiptsData);
     setFolders(foldersData);
-    
+
     const expanded = {};
-    foldersData.forEach(f => expanded[f.id] = true);
-    expanded['no-folder'] = true;
+    foldersData.forEach((f) => (expanded[f.id] = true));
+    expanded["no-folder"] = true;
     setExpandedFolders(expanded);
-    
+
     setIsLoading(false);
   };
 
   const toggleFolder = (folderId) => {
-    setExpandedFolders(prev => ({
+    setExpandedFolders((prev) => ({
       ...prev,
-      [folderId]: !prev[folderId]
+      [folderId]: !prev[folderId],
     }));
   };
 
   const filterReceipts = (receipts) => {
     return receipts
-      .filter(r => {
-        const matchesSearch = r.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             r.notes?.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = categoryFilter === "all" || r.category === categoryFilter;
+      .filter((r) => {
+        const matchesSearch =
+          r.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          r.notes?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory =
+          categoryFilter === "all" || r.category === categoryFilter;
         return matchesSearch && matchesCategory;
       })
       .sort((a, b) => {
@@ -70,11 +86,11 @@ export default function ReceiptsPage() {
   };
 
   const getReceiptsForFolder = (folderId) => {
-    return filterReceipts(receipts.filter(r => r.folder_id === folderId));
+    return filterReceipts(receipts.filter((r) => r.folder_id === folderId));
   };
 
   const getReceiptsWithoutFolder = () => {
-    return filterReceipts(receipts.filter(r => !r.folder_id));
+    return filterReceipts(receipts.filter((r) => !r.folder_id));
   };
 
   const getTotalFilteredReceipts = () => {
@@ -105,9 +121,12 @@ export default function ReceiptsPage() {
                   className="pl-10 border-slate-200"
                 />
               </div>
-              
+
               <div className="flex gap-2">
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <Select
+                  value={categoryFilter}
+                  onValueChange={setCategoryFilter}
+                >
                   <SelectTrigger className="w-full md:w-40 border-slate-200">
                     <SelectValue />
                   </SelectTrigger>
@@ -115,7 +134,9 @@ export default function ReceiptsPage() {
                     <SelectItem value="all">All Categories</SelectItem>
                     <SelectItem value="food_dining">Food & Dining</SelectItem>
                     <SelectItem value="groceries">Groceries</SelectItem>
-                    <SelectItem value="transportation">Transportation</SelectItem>
+                    <SelectItem value="transportation">
+                      Transportation
+                    </SelectItem>
                     <SelectItem value="utilities">Utilities</SelectItem>
                     <SelectItem value="healthcare">Healthcare</SelectItem>
                     <SelectItem value="entertainment">Entertainment</SelectItem>
@@ -141,9 +162,10 @@ export default function ReceiptsPage() {
 
             <div className="flex items-center justify-between">
               <p className="text-sm text-slate-600">
-                Showing {getTotalFilteredReceipts()} of {receipts.length} receipts
+                Showing {getTotalFilteredReceipts()} of {receipts.length}{" "}
+                receipts
               </p>
-              
+
               <div className="flex gap-1 border border-slate-200 rounded-lg p-1">
                 <Button
                   variant={viewMode === "grid" ? "secondary" : "ghost"}
@@ -167,12 +189,15 @@ export default function ReceiptsPage() {
         </Card>
 
         <div className="space-y-4">
-          {folders.map(folder => {
+          {folders.map((folder) => {
             const folderReceipts = getReceiptsForFolder(folder.id);
             if (folderReceipts.length === 0) return null;
-            
+
             return (
-              <Card key={folder.id} className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden">
+              <Card
+                key={folder.id}
+                className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden"
+              >
                 <div
                   className="flex items-center gap-3 p-4 cursor-pointer hover:bg-slate-50 transition-colors"
                   onClick={() => toggleFolder(folder.id)}
@@ -184,21 +209,26 @@ export default function ReceiptsPage() {
                       <ChevronRight className="w-5 h-5 text-slate-600" />
                     )}
                   </button>
-                  
-                  <div 
+
+                  <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md"
                     style={{ backgroundColor: folder.color }}
                   >
                     <FolderOpen className="w-5 h-5 text-white" />
                   </div>
-                  
+
                   <div className="flex-1">
                     <h3 className="font-bold text-slate-900">{folder.name}</h3>
-                    <p className="text-sm text-slate-500">{folderReceipts.length} receipts</p>
+                    <p className="text-sm text-slate-500">
+                      {folderReceipts.length} receipts
+                    </p>
                   </div>
 
                   <Badge variant="outline" className="border-slate-200">
-                    ${folderReceipts.reduce((sum, r) => sum + r.total_amount, 0).toFixed(2)}
+                    $
+                    {folderReceipts
+                      .reduce((sum, r) => sum + r.total_amount, 0)
+                      .toFixed(2)}
                   </Badge>
                 </div>
 
@@ -212,7 +242,7 @@ export default function ReceiptsPage() {
                     >
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-slate-50/50">
-                          {folderReceipts.map(receipt => (
+                          {folderReceipts.map((receipt) => (
                             <ReceiptCard
                               key={receipt.id}
                               receipt={receipt}
@@ -222,7 +252,7 @@ export default function ReceiptsPage() {
                         </div>
                       ) : (
                         <div className="divide-y divide-slate-100">
-                          {folderReceipts.map(receipt => (
+                          {folderReceipts.map((receipt) => (
                             <ReceiptListItem
                               key={receipt.id}
                               receipt={receipt}
@@ -242,32 +272,37 @@ export default function ReceiptsPage() {
             <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden">
               <div
                 className="flex items-center gap-3 p-4 cursor-pointer hover:bg-slate-50 transition-colors"
-                onClick={() => toggleFolder('no-folder')}
+                onClick={() => toggleFolder("no-folder")}
               >
                 <button className="p-1 hover:bg-slate-100 rounded transition-colors">
-                  {expandedFolders['no-folder'] ? (
+                  {expandedFolders["no-folder"] ? (
                     <ChevronDown className="w-5 h-5 text-slate-600" />
                   ) : (
                     <ChevronRight className="w-5 h-5 text-slate-600" />
                   )}
                 </button>
-                
+
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md bg-slate-400">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
-                
+
                 <div className="flex-1">
                   <h3 className="font-bold text-slate-900">Uncategorized</h3>
-                  <p className="text-sm text-slate-500">{getReceiptsWithoutFolder().length} receipts</p>
+                  <p className="text-sm text-slate-500">
+                    {getReceiptsWithoutFolder().length} receipts
+                  </p>
                 </div>
 
                 <Badge variant="outline" className="border-slate-200">
-                  ${getReceiptsWithoutFolder().reduce((sum, r) => sum + r.total_amount, 0).toFixed(2)}
+                  $
+                  {getReceiptsWithoutFolder()
+                    .reduce((sum, r) => sum + r.total_amount, 0)
+                    .toFixed(2)}
                 </Badge>
               </div>
 
               <AnimatePresence>
-                {expandedFolders['no-folder'] && (
+                {expandedFolders["no-folder"] && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
@@ -276,7 +311,7 @@ export default function ReceiptsPage() {
                   >
                     {viewMode === "grid" ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-slate-50/50">
-                        {getReceiptsWithoutFolder().map(receipt => (
+                        {getReceiptsWithoutFolder().map((receipt) => (
                           <ReceiptCard
                             key={receipt.id}
                             receipt={receipt}
@@ -286,7 +321,7 @@ export default function ReceiptsPage() {
                       </div>
                     ) : (
                       <div className="divide-y divide-slate-100">
-                        {getReceiptsWithoutFolder().map(receipt => (
+                        {getReceiptsWithoutFolder().map((receipt) => (
                           <ReceiptListItem
                             key={receipt.id}
                             receipt={receipt}
