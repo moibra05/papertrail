@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
           --accent-foreground: 0 0% 100%;
         }
       `}</style>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-blue-50 to-blue-50">
+      <div className="min-h-screen flex w-full bg-app">
         <SidebarComponent />
         <main className="flex-1 flex flex-col">
           <header className="bg-white/80 backdrop-blur-xl border-b border-blue-100/50 px-6 py-4 md:hidden">
