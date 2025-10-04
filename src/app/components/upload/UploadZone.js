@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
-import { Upload, Camera, FileText, ImageIcon } from "lucide-react";
+import { Upload, Camera, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
@@ -17,9 +17,6 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
         audio: false 
       });
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
       setShowCamera(true);
     } catch (err) {
       console.error("Error accessing camera:", err);
@@ -31,6 +28,10 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
+    }
+    if (videoRef.current) {
+      try { videoRef.current.pause(); } catch(e) {}
+      try { videoRef.current.srcObject = null; } catch(e) {}
     }
     setShowCamera(false);
   };
@@ -54,6 +55,37 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
   React.useEffect(() => {
     return () => stopCamera();
   }, []);
+
+  // When showCamera becomes true and the video element is mounted,
+  // attach the MediaStream and ensure playback starts.
+  React.useEffect(() => {
+    if (!showCamera) return;
+    const v = videoRef.current;
+    const s = streamRef.current;
+    if (!v || !s) return;
+
+    v.srcObject = s;
+
+    const tryPlay = async () => {
+      try {
+        await v.play();
+      } catch (playErr) {
+        console.warn('Video play() promise rejected (deferred):', playErr);
+        // As a fallback, wait for loadedmetadata and try again once
+        const onLoaded = () => {
+          v.play().catch((e) => console.warn('play() failed after loadedmetadata:', e));
+        };
+        v.addEventListener('loadedmetadata', onLoaded, { once: true });
+      }
+    };
+
+    tryPlay();
+
+    return () => {
+      try { v.pause(); } catch(e) {}
+      try { v.srcObject = null; } catch(e) {}
+    };
+  }, [showCamera]);
 
   if (showCamera) {
     return (
