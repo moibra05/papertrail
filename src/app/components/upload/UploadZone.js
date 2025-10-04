@@ -57,21 +57,21 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
 
   if (showCamera) {
     return (
-      <Card className="border-2 border-indigo-200 bg-white/80 backdrop-blur-sm shadow-xl">
+      <Card className="border-2 border-blue-200 bg-white/80 backdrop-blur-sm shadow-xl">
         <div className="p-6">
           <video
             ref={videoRef}
             autoPlay
             playsInline
             muted
-            className="w-full rounded-lg bg-black"
+            className="w-full h-[60vh] md:h-[72vh] max-h-[80vh] rounded-lg bg-black object-cover"
           />
           <div className="flex gap-3 mt-4">
             <Button
               onClick={capturePhoto}
-              className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
             >
-              <Camera className="w-4 h-4 mr-2" />
+              <Camera className="w-4 h-4 mr-2 text-white" />
               Capture
             </Button>
             <Button variant="outline" onClick={stopCamera}>
@@ -86,10 +86,10 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
   return (
     <div className="space-y-4">
       <Card
-        className={`border-2 border-dashed transition-all duration-300 ${
-          dragActive 
-            ? "border-indigo-500 bg-indigo-50" 
-            : "border-slate-200 bg-white/80 hover:border-indigo-300"
+        className={`border-2 transition-all duration-300 ${
+          dragActive
+            ? "border-blue-500 bg-blue-50"
+            : "border-slate-200 bg-white/80 hover:border-blue-300"
         } backdrop-blur-sm shadow-lg`}
         onDragEnter={onDrag}
         onDragLeave={onDrag}
@@ -108,7 +108,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-xl"
+            className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl"
           >
             <Upload className="w-10 h-10 text-white" />
           </motion.div>
@@ -130,9 +130,9 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => fileInputRef.current?.click()}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg"
+              className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 shadow-lg text-white"
             >
-              <FileText className="w-4 h-4 mr-2" />
+              <FileText className="w-4 h-4 mr-2 text-white" />
               Browse Files
             </Button>
             <Button
