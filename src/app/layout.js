@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
+import UserProvider from "../providers/UserProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,8 +30,10 @@ export default function RootLayout({ children }) {
       <body
         className={`flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster position="top-right" richColors/>
+        <UserProvider>
+          {children}
+          <Toaster position="top-right" richColors />
+        </UserProvider>
       </body>
     </html>
   );

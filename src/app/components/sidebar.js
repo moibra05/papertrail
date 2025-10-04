@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
+import { useUserClient } from "@/providers/UserProvider";
 
 const navigationItems = [
   {
@@ -47,6 +48,9 @@ const navigationItems = [
 
 export default function SidebarComponent() {
   const { signOut } = useAuth();
+  const { user } = useUserClient();
+
+  console.log("User in Sidebar:", user);
 
   return (
     <Sidebar className="border-r border-indigo-100/50 bg-white/80 backdrop-blur-xl">
@@ -97,17 +101,17 @@ export default function SidebarComponent() {
       <SidebarFooter className="border-t border-indigo-100/50 p-4">
         <div className="space-y-3">
           <div className="flex items-center gap-3 px-2">
-            {/* <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
-                      {user?.full_name?.[0]?.toUpperCase() || "U"}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-900 text-sm truncate">
-                        {user?.full_name || "User"}
-                      </p>
-                      <p className="text-xs text-slate-500 truncate">
-                        {user?.email || ""}
-                      </p>
-                    </div> */}
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
+              {user?.user_metadata?.full_name?.[0]?.toUpperCase() || "U"}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-slate-900 text-sm truncate">
+                {user?.user_metadata?.full_name || "User"}
+              </p>
+              <p className="text-xs text-slate-500 truncate">
+                {user?.email || ""}
+              </p>
+            </div>
           </div>
           <button
             onClick={signOut}
