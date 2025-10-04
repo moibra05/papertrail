@@ -93,7 +93,7 @@ export default function ReceiptsPage() {
           </p>
         </div>
 
-  <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg p-4 md:p-6">
+  <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 p-4 md:p-6">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1 relative">
@@ -172,7 +172,7 @@ export default function ReceiptsPage() {
             if (folderReceipts.length === 0) return null;
             
             return (
-              <Card key={folder.id} className="border-0 bg-surface backdrop-blur-sm shadow-lg overflow-hidden">
+              <Card key={folder.id} className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden">
                 <div
                   className="flex items-center gap-3 p-4 cursor-pointer hover:bg-input/10 transition-colors"
                   onClick={() => toggleFolder(folder.id)}
@@ -186,7 +186,7 @@ export default function ReceiptsPage() {
                   </button>
                   
                   <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md"
+                    className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md dark:shadow-gray-500/10"
                     style={{ backgroundColor: folder.color }}
                   >
                     <FolderOpen className="w-5 h-5 text-white" />
@@ -239,7 +239,7 @@ export default function ReceiptsPage() {
           })}
 
           {getReceiptsWithoutFolder().length > 0 && (
-            <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg overflow-hidden">
+            <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden">
               <div
                 className="flex items-center gap-3 p-4 cursor-pointer hover:bg-input/10 transition-colors"
                 onClick={() => toggleFolder('no-folder')}
@@ -252,7 +252,7 @@ export default function ReceiptsPage() {
                   )}
                 </button>
                 
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md bg-slate-400">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md dark:shadow-gray-500/10 bg-slate-400">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
                 

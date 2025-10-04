@@ -29,7 +29,7 @@ export default function ReceiptCard({ receipt, onClick }) {
       transition={{ duration: 0.2 }}
     >
       <Card 
-        className="border-0 bg-surface backdrop-blur-sm shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 overflow-hidden"
+        className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 hover:shadow-xl cursor-pointer transition-all duration-300 overflow-hidden"
         onClick={onClick}
       >
         <div className={`h-2 bg-gradient-to-r ${categoryColors[receipt.category]}`} />

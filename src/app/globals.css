@@ -76,9 +76,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  /* Shadow tokens (light mode) */
-  --shadow-md: 0 4px 6px -2px rgba(2,6,23,0.06), 0 2px 4px -2px rgba(2,6,23,0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(2,6,23,0.08), 0 4px 6px -4px rgba(2,6,23,0.06);
 }
 
 .dark {
@@ -113,9 +110,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  /* Shadow tokens (dark mode) - reduced contrast to avoid heavy dark-on-dark shadows */
-  --shadow-md: 0 2px 4px -1px rgba(0,0,0,0.45), 0 1px 2px -1px rgba(0,0,0,0.35);
-  --shadow-lg: 0 6px 10px -4px rgba(202, 200, 200, 0.5), 0 2px 4px -2px rgba(209, 209, 209, 0.4);
 }
 
 @layer base {
@@ -157,14 +151,5 @@
 
   .text-muted {
     color: color(var(--muted-foreground));
-  }
-
-  /* Theme-aware shadow utilities (override Tailwind defaults with theme tokens) */
-  .shadow-md {
-    box-shadow: var(--shadow-md);
-  }
-
-  .shadow-lg {
-    box-shadow: var(--shadow-lg);
   }
 }

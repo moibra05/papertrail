@@ -30,7 +30,7 @@ export default function SpendingChart({ receipts }) {
   };
 
   return (
-    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 dark:shadow-gray-500/10">
       <CardHeader className="border-b border-subtle">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-bold text-foreground">{getCurrentTitle()}</CardTitle>
@@ -44,7 +44,7 @@ export default function SpendingChart({ receipts }) {
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-card border border-subtle rounded-lg shadow-lg contain-content">
+              <div className="absolute right-0 mt-2 w-40 bg-card border border-subtle rounded-lg shadow-lg z-20 dark:shadow-gray-500/10 contain-content">
                 {viewOptions.map(option => (
                   <div
                     key={option.value}

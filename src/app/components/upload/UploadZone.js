@@ -101,7 +101,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           <div className="flex gap-3 mt-4">
             <Button
               onClick={capturePhoto}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-lg dark:shadow-gray-500/10"
             >
               <Camera className="w-4 h-4 mr-2 text-white" />
               Capture
@@ -122,7 +122,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           dragActive
             ? "border-blue-500 bg-blue-50"
             : "border-subtle bg-surface hover:border-blue-300"
-        } backdrop-blur-sm shadow-lg`}
+        } backdrop-blur-sm shadow-lg dark:shadow-gray-500/10`}
         onDragEnter={onDrag}
         onDragLeave={onDrag}
         onDragOver={onDrag}
@@ -162,7 +162,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => fileInputRef.current?.click()}
-              className="bg-blue-600 hover:bg-blue-700 shadow-lg text-white"
+              className="bg-blue-600 hover:bg-blue-700 shadow-lg dark:shadow-gray-500/10 text-white"
             >
               <FileText className="w-4 h-4 mr-2 text-white" />
               Browse Files

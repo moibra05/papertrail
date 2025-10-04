@@ -17,7 +17,7 @@ export default function FolderCard({ folder, receiptCount, onEdit, onDelete, ind
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
     >
-  <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
+  <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 hover:shadow-xl transition-all duration-300">
         <div
           className="h-3 rounded-t-xl"
           style={{ backgroundColor: folder.color }}
@@ -26,7 +26,7 @@ export default function FolderCard({ folder, receiptCount, onEdit, onDelete, ind
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-md"
+                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-md dark:shadow-gray-500/10"
                 style={{ backgroundColor: folder.color }}
               >
                 <FolderOpen className="w-6 h-6 text-white" />

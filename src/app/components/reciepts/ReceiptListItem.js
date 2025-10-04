@@ -28,7 +28,7 @@ export default function ReceiptListItem({ receipt, onClick }) {
       onClick={onClick}
     >
       <div className="flex-shrink-0">
-        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-md">
+        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-md dark:shadow-gray-500/10">
           <FileText className="w-6 h-6 text-white" />
         </div>
       </div>

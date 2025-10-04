@@ -8,6 +8,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
 import { TrendingUp, DollarSign, Calendar, ShoppingBag } from "lucide-react";
+import StatCard from "../../components/dashboard/StatCards";
 
 const COLORS = ['#6366F1', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#3B82F6', '#EF4444'];
 
@@ -108,71 +109,37 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500">
-                  <DollarSign className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted font-medium">Total Spending</p>
-                  <p className="text-2xl font-bold text-foreground">
-                    ${getTotalSpending().toFixed(2)}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard
+            title="Total Spending"
+            value={`$${getTotalSpending().toFixed(2)}`}
+            icon={DollarSign}
+            gradient="from-indigo-500 to-purple-500"
+          />
 
-          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500">
-                  <ShoppingBag className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted font-medium">Transactions</p>
-                  <p className="text-2xl font-bold text-foreground">{filteredReceipts.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard
+            title="Transactions"
+            value={filteredReceipts.length}
+            icon={ShoppingBag}
+            gradient="from-green-500 to-emerald-500"
+          />
 
-          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500">
-                  <TrendingUp className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted font-medium">Average Transaction</p>
-                  <p className="text-2xl font-bold text-foreground">
-                    ${getAverageTransaction().toFixed(2)}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard
+            title="Avg. Transaction"
+            value={`$${getAverageTransaction().toFixed(2)}`}
+            icon={TrendingUp}
+            gradient="from-blue-500 to-cyan-500"
+          />
 
-          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-red-500">
-                  <Calendar className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted font-medium">Categories</p>
-                  <p className="text-2xl font-bold text-foreground">
-                    {getCategoryData().length}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard
+            title="Categories"
+            value={getCategoryData().length}
+            icon={Calendar}
+            gradient="from-orange-500 to-red-500"
+          />
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
-          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10">
             <CardHeader className="border-b border-subtle">
               <CardTitle className="text-xl font-bold text-foreground">Spending by Category</CardTitle>
             </CardHeader>
@@ -199,7 +166,7 @@ export default function AnalyticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10">
             <CardHeader className="border-b border-subtle">
               <CardTitle className="text-xl font-bold text-foreground">Top Merchants</CardTitle>
             </CardHeader>
@@ -222,7 +189,7 @@ export default function AnalyticsPage() {
           </Card>
         </div>
 
-        <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+        <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10">
           <CardHeader className="border-b border-subtle">
             <CardTitle className="text-xl font-bold text-foreground">Spending Trend Over Time</CardTitle>
           </CardHeader>

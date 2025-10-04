@@ -23,7 +23,7 @@ const categoryColors = {
 
 export default function RecentReceipts({ receipts, isLoading, onSelectReceipt }) {
   return (
-    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10">
       <CardHeader className="border-b border-subtle pb-4">
         <CardTitle className="text-xl font-bold text-foreground">Recent Receipts</CardTitle>
       </CardHeader>

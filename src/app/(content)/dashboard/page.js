@@ -56,7 +56,7 @@ export default function Home() {
             <p className="text-muted">Manage your receipts and track expenses effortlessly</p>
           </div>
           {/* <Link to={createPageUrl("Upload")}>
-            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg">
+            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg dark:shadow-gray-500/10">
               <Plus className="w-5 h-5 mr-2" />
               Upload Receipt
             </Button>

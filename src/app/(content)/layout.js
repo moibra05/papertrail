@@ -61,7 +61,7 @@ export default function RootLayout({ children }) {
         <Sidebar className="border-r border-sidebar sidebar-bg backdrop-blur-xl">
           <SidebarHeader className="border-b border-sidebar p-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-300 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-300 to-blue-600 rounded-xl flex items-center justify-center shadow-lg dark:shadow-gray-500/10 shadow-blue-500/30">
                 <Receipt className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -106,7 +106,7 @@ export default function RootLayout({ children }) {
           <SidebarFooter className="border-t border-sidebar p-4">
             <div className="space-y-3">
               <div className="flex items-center gap-3 px-2">
-                {/* <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
+                {/* <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg dark:shadow-gray-500/10">
                       {user?.full_name?.[0]?.toUpperCase() || "U"}
                     </div>
                     <div className="flex-1 min-w-0">
