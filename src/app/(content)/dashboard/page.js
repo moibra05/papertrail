@@ -10,7 +10,6 @@ import RecentReceipts from "../../components/dashboard/RecentReceipts";
 import SpendingChart from "../../components/dashboard/SpendingChart";
 import ReceiptDetailsModal from "../../components/reciepts/ReceiptDetailsModal";
 import { useUserClient } from "@/providers/UserProvider";
-import Link from "next/link";
 
 export default function Home() {
   const [receipts, setReceipts] = useState([]);
