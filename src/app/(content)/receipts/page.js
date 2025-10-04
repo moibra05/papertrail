@@ -88,19 +88,19 @@ export default function ReceiptsPage() {
     <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-7xl mx-auto space-y-6">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
             All Receipts
           </h1>
-          <p className="text-slate-600">
+          <p className="text-muted">
             Browse, search, and manage your receipts
           </p>
         </div>
 
-        <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg p-4 md:p-6 ">
+  <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 p-4 md:p-6">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted" />
                 <Input
                   placeholder="Search receipts..."
                   value={searchTerm}
@@ -110,11 +110,8 @@ export default function ReceiptsPage() {
               </div>
 
               <div className="flex gap-2">
-                <Select
-                  value={categoryFilter}
-                  onValueChange={setCategoryFilter}
-                >
-                  <SelectTrigger className="w-full md:w-40 border-slate-200">
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <SelectTrigger className="w-full md:w-40 border-slate-200 bg-surface">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -134,7 +131,7 @@ export default function ReceiptsPage() {
                 </Select>
 
                 <Select value={dateSort} onValueChange={setDateSort}>
-                  <SelectTrigger className="w-full md:w-40 border-slate-200">
+                  <SelectTrigger className="w-full md:w-40 border-slate-200 bg-surface">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -148,11 +145,10 @@ export default function ReceiptsPage() {
             </div>
 
             <div className="flex items-center justify-between">
-              <p className="text-sm text-slate-600">
-                Showing {getTotalFilteredReceipts()} of {receipts.length}{" "}
-                receipts
+              <p className="text-sm text-muted">
+                Showing {getTotalFilteredReceipts()} of {receipts.length} receipts
               </p>
-
+              
               <div className="flex gap-1 border border-slate-200 rounded-lg p-1">
                 <Button
                   variant={viewMode === "grid" ? "secondary" : "ghost"}
@@ -181,24 +177,21 @@ export default function ReceiptsPage() {
             if (folderReceipts.length === 0) return null;
 
             return (
-              <Card
-                key={folder.id}
-                className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden py-0 gap-0"
-              >
+              <Card key={folder.id} className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden py-0 gap-0">
                 <div
-                  className="flex items-center gap-3 p-4 cursor-pointer hover:bg-slate-50 transition-colors"
+                  className="flex items-center gap-3 p-4 cursor-pointer hover:bg-input/10 transition-colors"
                   onClick={() => toggleFolder(folder.id)}
                 >
                   <button className="p-1 hover:bg-slate-100 rounded transition-colors">
                     {expandedFolders[folder.id] ? (
-                      <ChevronDown className="w-5 h-5 text-slate-600" />
+                      <ChevronDown className="w-5 h-5 text-muted" />
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-slate-600" />
+                      <ChevronRight className="w-5 h-5 text-muted" />
                     )}
                   </button>
-
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md"
+                  
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md dark:shadow-gray-500/10"
                     style={{ backgroundColor: folder.color }}
                   >
                     {expandedFolders[folder.id] ? (
@@ -209,17 +202,12 @@ export default function ReceiptsPage() {
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="font-bold text-slate-900">{folder.name}</h3>
-                    <p className="text-sm text-slate-500">
-                      {folderReceipts.length} receipts
-                    </p>
+                    <h3 className="font-bold text-foreground">{folder.name}</h3>
+                    <p className="text-sm text-muted">{folderReceipts.length} receipts</p>
                   </div>
 
                   <Badge variant="outline" className="border-slate-200">
-                    $
-                    {folderReceipts
-                      .reduce((sum, r) => sum + r.total_amount, 0)
-                      .toFixed(2)}
+                    ${folderReceipts.reduce((sum, r) => sum + r.total_amount, 0).toFixed(2)}
                   </Badge>
                 </div>
 
@@ -232,8 +220,8 @@ export default function ReceiptsPage() {
                       transition={{ duration: 0.2 }}
                     >
                       {viewMode === "grid" ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-slate-50/50">
-                          {folderReceipts.map((receipt) => (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-surface">
+                          {folderReceipts.map(receipt => (
                             <ReceiptCard
                               key={receipt.id}
                               receipt={receipt}
@@ -260,35 +248,30 @@ export default function ReceiptsPage() {
           })}
 
           {getReceiptsWithoutFolder().length > 0 && (
-            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden p-0 gap-0">
+            <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden p-0 gap-0">
               <div
-                className="flex items-center gap-3 p-4 cursor-pointer hover:bg-slate-50 transition-colors"
-                onClick={() => toggleFolder("no-folder")}
+                className="flex items-center gap-3 p-4 cursor-pointer hover:bg-input/10 transition-colors"
+                onClick={() => toggleFolder('no-folder')}
               >
                 <button className="p-1 hover:bg-slate-100 rounded transition-colors">
-                  {expandedFolders["no-folder"] ? (
-                    <ChevronDown className="w-5 h-5 text-slate-600" />
+                  {expandedFolders['no-folder'] ? (
+                    <ChevronDown className="w-5 h-5 text-muted" />
                   ) : (
-                    <ChevronRight className="w-5 h-5 text-slate-600" />
+                    <ChevronRight className="w-5 h-5 text-muted" />
                   )}
                 </button>
-
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md bg-slate-400">
+                
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md dark:shadow-gray-500/10 bg-slate-400">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
 
                 <div className="flex-1">
-                  <h3 className="font-bold text-slate-900">Uncategorized</h3>
-                  <p className="text-sm text-slate-500">
-                    {getReceiptsWithoutFolder().length} receipts
-                  </p>
+                  <h3 className="font-bold text-foreground">Uncategorized</h3>
+                  <p className="text-sm text-muted">{getReceiptsWithoutFolder().length} receipts</p>
                 </div>
 
                 <Badge variant="outline" className="border-slate-200">
-                  $
-                  {getReceiptsWithoutFolder()
-                    .reduce((sum, r) => sum + r.total_amount, 0)
-                    .toFixed(2)}
+                  ${getReceiptsWithoutFolder().reduce((sum, r) => sum + r.total_amount, 0).toFixed(2)}
                 </Badge>
               </div>
 
@@ -301,8 +284,8 @@ export default function ReceiptsPage() {
                     transition={{ duration: 0.2 }}
                   >
                     {viewMode === "grid" ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-slate-50/50">
-                        {getReceiptsWithoutFolder().map((receipt) => (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-surface">
+                        {getReceiptsWithoutFolder().map(receipt => (
                           <ReceiptCard
                             key={receipt.id}
                             receipt={receipt}
@@ -330,9 +313,9 @@ export default function ReceiptsPage() {
 
         {getTotalFilteredReceipts() === 0 && !isLoading && (
           <div className="text-center py-16">
-            <FileText className="w-20 h-20 mx-auto text-slate-300 mb-4" />
-            <p className="text-slate-500 text-lg">No receipts found</p>
-            <p className="text-slate-400 mt-2">Try adjusting your filters</p>
+            <FileText className="w-20 h-20 mx-auto text-muted mb-4" />
+            <p className="text-muted text-lg">No receipts found</p>
+            <p className="text-muted mt-2">Try adjusting your filters</p>
           </div>
         )}
       </div>

@@ -26,6 +26,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useUserClient } from "@/providers/UserProvider";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/components/ui/theme-toggle";
 
 const navigationItems = [
   {
@@ -61,17 +62,17 @@ export default function SidebarComponent() {
   const pathname = usePathname();
 
   return (
-    <Sidebar className="border-r border-indigo-100/50 bg-white/80 backdrop-blur-xl">
-      <SidebarHeader className="border-b border-blue-100/50 p-6">
+    <Sidebar className="border-r border-sidebar sidebar-bg backdrop-blur-xl">
+      <SidebarHeader className="border-b border-sidebar p-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-300 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-300 to-blue-600 rounded-xl flex items-center justify-center shadow-lg dark:shadow-gray-500/10 shadow-blue-500/30">
             <Receipt className="w-6 h-6 text-white" />
           </div>
           <div>
             <h2 className="font-bold text-xl bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
               PaperTrail
             </h2>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-xs text-muted font-medium">
               Smart Receipt Manager
             </p>
           </div>
@@ -80,7 +81,7 @@ export default function SidebarComponent() {
 
       <SidebarContent className="p-3">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 py-2">
+          <SidebarGroupLabel className="text-xs font-semibold text-muted uppercase tracking-wider px-3 py-2">
             Navigation
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -115,21 +116,22 @@ export default function SidebarComponent() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-indigo-100/50 p-4">
+      <SidebarFooter className="border-t border-sidebar p-4">
         <div className="space-y-3">
+          <ThemeToggle />
+
           <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg dark:shadow-gray-500/10">
               {user?.user_metadata?.full_name?.[0]?.toUpperCase() || "U"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-slate-900 text-sm truncate">
+              <p className="font-semibold text-foreground text-sm truncate">
                 {user?.user_metadata?.full_name || "User"}
               </p>
-              <p className="text-xs text-slate-500 truncate">
-                {user?.email || ""}
-              </p>
+              <p className="text-xs text-muted truncate">{user?.email || ""}</p>
             </div>
           </div>
+          <div></div>
           <button
             onClick={signOut}
             className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"

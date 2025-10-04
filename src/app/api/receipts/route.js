@@ -9,7 +9,6 @@ export const config = {
 export async function POST(request) {
     try {
         const formData = await request.formData();
-        console.log("form data: ", formData)
         
         const file = formData.get('raw_receipt'); 
         if (!file) {

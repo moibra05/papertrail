@@ -53,59 +53,53 @@ export default function ReceiptDetailsModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-slate-900">
-            Receipt Details
-          </DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-foreground">Receipt Details</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
                 Merchant Information
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-slate-400" />
+                  <FileText className="w-4 h-4 text-muted" />
                   <div>
-                    <p className="text-xs text-slate-500">Merchant</p>
-                    <p className="font-semibold text-slate-900">
-                      {receipt.merchant}
-                    </p>
+                    <p className="text-xs text-muted">Merchant</p>
+                    <p className="font-semibold text-foreground">{receipt.merchant}</p>
                   </div>
                 </div>
                 {receipt.receipt_number && (
                   <div>
-                    <p className="text-xs text-slate-500">Receipt Number</p>
-                    <p className="font-medium text-slate-700">
-                      {receipt.receipt_number}
-                    </p>
+                    <p className="text-xs text-muted">Receipt Number</p>
+                    <p className="font-medium text-muted">{receipt.receipt_number}</p>
                   </div>
                 )}
               </div>
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
                 Transaction Details
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-slate-400" />
+                  <Calendar className="w-4 h-4 text-muted" />
                   <div>
-                    <p className="text-xs text-slate-500">Date</p>
-                    <p className="font-medium text-slate-700">
+                    <p className="text-xs text-muted">Date</p>
+                    <p className="font-medium text-muted">
                       {format(new Date(receipt.created_at), "MMMM d, yyyy")}
                     </p>
                   </div>
                 </div>
                 {receipt.payment_method && (
                   <div className="flex items-center gap-2">
-                    <CreditCard className="w-4 h-4 text-slate-400" />
+                    <CreditCard className="w-4 h-4 text-muted" />
                     <div>
-                      <p className="text-xs text-slate-500">Payment Method</p>
-                      <p className="font-medium text-slate-700">
-                        {receipt.payment_method.replace(/_/g, " ")}
+                      <p className="text-xs text-muted">Payment Method</p>
+                      <p className="font-medium text-muted">
+                        {receipt.payment_method.replace(/_/g, ' ')}
                       </p>
                     </div>
                   </div>
@@ -114,25 +108,23 @@ export default function ReceiptDetailsModal({
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
+          <div className="rounded-xl p-6 bg-surface">
             <div className="flex justify-between items-center mb-2">
-              <p className="text-slate-600 font-medium">Total Amount</p>
-              <p className="text-3xl font-bold text-slate-900">
+              <p className="text-muted font-medium">Total Amount</p>
+              <p className="text-3xl font-bold text-foreground">
                 ${receipt.total_amount.toFixed(2)}
               </p>
             </div>
             {receipt.tax_amount && (
               <div className="flex justify-between items-center text-sm">
-                <p className="text-slate-500">Tax</p>
-                <p className="text-slate-700">
-                  ${receipt.tax_amount.toFixed(2)}
-                </p>
+                <p className="text-muted">Tax</p>
+                <p className="text-muted">${receipt.tax_amount.toFixed(2)}</p>
               </div>
             )}
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+            <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
               Categories & Tags
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -142,25 +134,24 @@ export default function ReceiptDetailsModal({
               >
                 {receipt.category?.replace(/_/g, " ")}
               </Badge>
-              {receipt.tags &&
-                receipt.tags.map((tag, i) => (
-                  <Badge key={i} variant="outline" className="border-slate-200">
-                    <Tag className="w-3 h-3 mr-1" />
-                    {tag}
-                  </Badge>
-                ))}
+              {receipt.tags && receipt.tags.map((tag, i) => (
+                <Badge key={i} variant="outline" className="border-subtle">
+                  <Tag className="w-3 h-3 mr-1" />
+                  {tag}
+                </Badge>
+              ))}
             </div>
           </div>
 
           {receipt.items && receipt.items.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
                 Line Items
               </h3>
-              <div className="border rounded-xl overflow-hidden">
+              <div className="border border-subtle rounded-xl overflow-hidden">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-slate-50">
+                    <TableRow className="bg-surface">
                       <TableHead>Description</TableHead>
                       <TableHead className="text-right">Qty</TableHead>
                       <TableHead className="text-right">Price</TableHead>
@@ -192,18 +183,16 @@ export default function ReceiptDetailsModal({
 
           {receipt.notes && (
             <div>
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">
+              <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-2">
                 Notes
               </h3>
-              <p className="text-slate-700 bg-slate-50 rounded-lg p-4">
-                {receipt.notes}
-              </p>
+              <p className="text-muted bg-surface rounded-lg p-4">{receipt.notes}</p>
             </div>
           )}
 
           {receipt.file_url && (
             <div>
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
                 Original Receipt
               </h3>
               <a
@@ -218,7 +207,7 @@ export default function ReceiptDetailsModal({
             </div>
           )}
 
-          <div className="flex justify-end gap-3 pt-4 border-t">
+          <div className="flex justify-end gap-3 pt-4 border-t border-subtle">
             <Button
               variant="outline"
               onClick={handleDelete}

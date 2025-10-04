@@ -24,21 +24,21 @@ export default function ReceiptListItem({ receipt, onClick }) {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur-sm hover:bg-indigo-50/50 cursor-pointer transition-all duration-200 border-b border-slate-100 last:border-b-0"
+    className="flex items-center gap-4 p-4 bg-surface backdrop-blur-sm hover:bg-input/10 cursor-pointer transition-all duration-200 border-b border-subtle last:border-b-0"
       onClick={onClick}
     >
       <div className="flex-shrink-0">
-        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-md">
+        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-md dark:shadow-gray-500/10">
           <FileText className="w-6 h-6 text-white" />
         </div>
       </div>
 
       <div className="flex-1 min-w-0 grid md:grid-cols-5 gap-4 items-center">
         <div className="md:col-span-2">
-          <h4 className="font-semibold text-slate-900 truncate">{receipt.merchant}</h4>
+          <h4 className="font-semibold text-foreground truncate">{receipt.merchant}</h4>
           <div className="flex items-center gap-2 mt-1">
-            <Calendar className="w-3 h-3 text-slate-400" />
-            <p className="text-sm text-slate-500">
+            <Calendar className="w-3 h-3 text-muted" />
+            <p className="text-sm text-muted">
               {format(new Date(receipt.created_at), "MMM d, yyyy")}
             </p>
           </div>
@@ -53,8 +53,8 @@ export default function ReceiptListItem({ receipt, onClick }) {
         <div className="hidden md:flex items-center gap-2">
           {receipt.payment_method && (
             <>
-              <CreditCard className="w-3 h-3 text-slate-400" />
-              <span className="text-sm text-slate-600">
+              <CreditCard className="w-3 h-3 text-muted" />
+              <span className="text-sm text-muted">
                 {receipt.payment_method.replace(/_/g, ' ')}
               </span>
             </>
@@ -62,7 +62,7 @@ export default function ReceiptListItem({ receipt, onClick }) {
         </div>
 
         <div className="flex items-center justify-between md:justify-end gap-3">
-          <p className="text-lg font-bold text-slate-900">
+          <p className="text-lg font-bold text-foreground">
             ${receipt.total_amount.toFixed(2)}
           </p>
           {receipt.file_url && (
@@ -71,9 +71,9 @@ export default function ReceiptListItem({ receipt, onClick }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="p-2 hover:bg-indigo-100 rounded-lg transition-colors duration-200"
+              className="p-2 hover:bg-input/20 rounded-lg transition-colors duration-200"
             >
-              <ExternalLink className="w-4 h-4 text-indigo-600" />
+              <ExternalLink className="w-4 h-4 text-muted" />
             </a>
           )}
         </div>

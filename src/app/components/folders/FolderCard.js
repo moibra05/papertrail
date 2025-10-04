@@ -25,7 +25,7 @@ export default function FolderCard({
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
     >
-      <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl hover:scale-101 cursor-pointer transition-all duration-300 min-w-0 pt-0 h-full">
+  <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 hover:shadow-xl hover:scale-101 cursor-pointer transition-all duration-300 min-w-0 pt-0 h-full">
       <Link
         href={`/folders/${folder.id}`}
       >
@@ -36,7 +36,7 @@ export default function FolderCard({
           <CardHeader className="pb-3 pt-4 min-w-0">
             <div className="flex items-start justify-between min-w-0 gap-3">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-md"
+                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-md dark:shadow-gray-500/10"
                 style={{ backgroundColor: folder.color }}
               >
                 <FolderOpen className="w-6 h-6 text-white" />
@@ -48,7 +48,7 @@ export default function FolderCard({
                 >
                   {folder.name}
                 </CardTitle>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-muted">
                   {receiptCount} receipts
                   {typeof subfolderCount === "number" && (
                     <span className="ml-2">· {subfolderCount} subfolders</span>
@@ -58,7 +58,7 @@ export default function FolderCard({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <MoreVertical className="w-4 h-4 text-slate-400" />
+                    <MoreVertical className="w-4 h-4 text-muted" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

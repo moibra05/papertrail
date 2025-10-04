@@ -23,12 +23,12 @@ const categoryColors = {
 
 export default function RecentReceipts({ receipts, isLoading, onSelectReceipt }) {
   return (
-    <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-      <CardHeader className="border-b border-indigo-100/50 pb-4">
-        <CardTitle className="text-xl font-bold text-slate-900">Recent Receipts</CardTitle>
+    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10">
+      <CardHeader className="border-b border-subtle pb-4">
+        <CardTitle className="text-xl font-bold text-foreground">Recent Receipts</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-subtle">
           {isLoading ? (
             Array(5).fill(0).map((_, i) => (
               <div key={i} className="p-4 space-y-2">
@@ -38,9 +38,9 @@ export default function RecentReceipts({ receipts, isLoading, onSelectReceipt })
             ))
           ) : receipts.length === 0 ? (
             <div className="p-12 text-center">
-              <FileText className="w-16 h-16 mx-auto text-slate-300 mb-4" />
-              <p className="text-slate-500 font-medium">No receipts yet</p>
-              <p className="text-sm text-slate-400 mt-1">Upload your first receipt to get started</p>
+              <FileText className="w-16 h-16 mx-auto text-muted mb-4" />
+              <p className="text-muted font-medium">No receipts yet</p>
+              <p className="text-sm text-muted mt-1">Upload your first receipt to get started</p>
             </div>
           ) : (
             receipts.slice(0, 8).map((receipt, index) => (
@@ -50,17 +50,17 @@ export default function RecentReceipts({ receipts, isLoading, onSelectReceipt })
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => onSelectReceipt(receipt)}
-                className="p-4 hover:bg-indigo-50/50 cursor-pointer transition-colors duration-200"
+                className="p-4 hover:bg-input/10 cursor-pointer transition-colors duration-200"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-slate-900 truncate">{receipt.merchant}</h4>
-                    <p className="text-sm text-slate-500">
+                    <h4 className="font-semibold text-foreground truncate">{receipt.merchant}</h4>
+                    <p className="text-sm text-muted">
                       {format(new Date(receipt.created_at), "MMM d, yyyy")}
                     </p>
                   </div>
                   <div className="text-right ml-4">
-                    <p className="font-bold text-slate-900">
+                    <p className="font-bold text-foreground">
                       ${receipt.total_amount.toFixed(2)}
                     </p>
                     {receipt.file_url && (
@@ -69,7 +69,7 @@ export default function RecentReceipts({ receipts, isLoading, onSelectReceipt })
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="text-indigo-600 hover:text-indigo-700 inline-block mt-1"
+                        className="text-muted hover:text-foreground inline-block mt-1"
                       >
                         <ExternalLink className="w-4 h-4" />
                       </a>
@@ -81,7 +81,7 @@ export default function RecentReceipts({ receipts, isLoading, onSelectReceipt })
                     {receipt.category?.replace(/_/g, ' ')}
                   </Badge>
                   {receipt.payment_method && (
-                    <Badge variant="outline" className="text-xs border-slate-200">
+                    <Badge variant="outline" className="text-xs border-subtle">
                       {receipt.payment_method.replace(/_/g, ' ')}
                     </Badge>
                   )}
