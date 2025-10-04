@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { ChevronDown } from "lucide-react";
 
 export default function SpendingChart({ receipts }) {
+  const [selectedView, setSelectedView] = useState('spending');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const viewOptions = [
+    {value: 'spending', label: 'Spending', title: 'Spending Trends' },
+    {value: 'category', label: 'Category', title: 'Category Analysis' },
+    {value: 'merchant', label: 'Merchant', title: 'Merchant Breakdown' }
+  ]
+
+  const getCurrentTitle = () => {
+    return viewOptions.find(option => option.value === selectedView)?.title || 'Analytics Dashboard';
+  };
+
   const getMonthlyData = () => {
     const monthlyTotals = {};
     receipts.forEach(receipt => {
@@ -18,7 +32,35 @@ export default function SpendingChart({ receipts }) {
   return (
     <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
       <CardHeader className="border-b border-indigo-100/50">
-        <CardTitle className="text-xl font-bold text-slate-900">Spending Trends</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-xl font-bold text-slate-900">{getCurrentTitle()}</CardTitle>
+          <div className="relative">
+            <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 focus:outline-none border border-slate-200 rounded-lg bg-white hover:bg-slate-50"
+            >
+                {viewOptions.find(option => option.value === selectedView)?.label}
+                <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-lg shadow-lg z-20">
+                    {viewOptions.map(option => (
+                        <div
+                            key={option.value}
+                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-slate-100 ${selectedView === option.value ? 'bg-slate-100' : ''}`}
+                            onClick={() => {
+                                setSelectedView(option.value);
+                                setIsDropdownOpen(false);
+                            }}
+                        >
+                            {option.label}
+                        </div>
+                    ))}
+                </div>
+            )}
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="pt-6">
         <ResponsiveContainer width="100%" height={300}>
