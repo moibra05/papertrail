@@ -29,7 +29,7 @@ export default function ReceiptCard({ receipt, onClick }) {
       transition={{ duration: 0.2 }}
     >
       <Card 
-        className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 overflow-hidden"
+        className="border-0 bg-surface backdrop-blur-sm shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 overflow-hidden"
         onClick={onClick}
       >
         <div className={`h-2 bg-gradient-to-r ${categoryColors[receipt.category]}`} />
@@ -37,32 +37,32 @@ export default function ReceiptCard({ receipt, onClick }) {
           <div className="flex justify-between items-start mb-3">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <FileText className="w-4 h-4 text-slate-400" />
-                <h3 className="font-bold text-slate-900 truncate">{receipt.merchant}</h3>
+                <FileText className="w-4 h-4 text-muted" />
+                <h3 className="font-bold text-foreground truncate">{receipt.merchant}</h3>
               </div>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-muted">
                 {format(new Date(receipt.date), "MMMM d, yyyy")}
               </p>
             </div>
             {receipt.file_url && (
               <a
-                href={receipt.file_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="ml-2 p-2 hover:bg-indigo-50 rounded-lg transition-colors duration-200"
-              >
-                <ExternalLink className="w-4 h-4 text-indigo-600" />
-              </a>
+                  href={receipt.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="ml-2 p-2 hover:bg-input/20 rounded-lg transition-colors duration-200"
+                >
+                  <ExternalLink className="w-4 h-4 text-muted" />
+                </a>
             )}
           </div>
 
           <div className="mb-3">
-            <p className="text-2xl font-bold text-slate-900">
+            <p className="text-2xl font-bold text-foreground">
               ${receipt.total_amount.toFixed(2)}
             </p>
             {receipt.tax_amount && (
-              <p className="text-xs text-slate-500">Tax: ${receipt.tax_amount.toFixed(2)}</p>
+              <p className="text-xs text-muted">Tax: ${receipt.tax_amount.toFixed(2)}</p>
             )}
           </div>
 
@@ -71,7 +71,7 @@ export default function ReceiptCard({ receipt, onClick }) {
               {receipt.category?.replace(/_/g, ' ')}
             </Badge>
             {receipt.payment_method && (
-              <Badge variant="outline" className="text-xs border-slate-200">
+              <Badge variant="outline" className="text-xs border-subtle">
                 {receipt.payment_method.replace(/_/g, ' ')}
               </Badge>
             )}
@@ -79,9 +79,9 @@ export default function ReceiptCard({ receipt, onClick }) {
 
           {receipt.tags && receipt.tags.length > 0 && (
             <div className="flex items-center gap-1 flex-wrap">
-              <Tag className="w-3 h-3 text-slate-400" />
+              <Tag className="w-3 h-3 text-muted" />
               {receipt.tags.slice(0, 3).map((tag, i) => (
-                <span key={i} className="text-xs text-slate-500">
+                <span key={i} className="text-xs text-muted">
                   {tag}{i < Math.min(receipt.tags.length - 1, 2) ? ',' : ''}
                 </span>
               ))}
@@ -89,7 +89,7 @@ export default function ReceiptCard({ receipt, onClick }) {
           )}
 
           {receipt.notes && (
-            <p className="text-sm text-slate-600 mt-3 line-clamp-2">{receipt.notes}</p>
+            <p className="text-sm text-muted mt-3 line-clamp-2">{receipt.notes}</p>
           )}
         </div>
       </Card>

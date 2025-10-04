@@ -17,7 +17,7 @@ export default function FolderCard({ folder, receiptCount, onEdit, onDelete, ind
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
     >
-      <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
+  <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
         <div
           className="h-3 rounded-t-xl"
           style={{ backgroundColor: folder.color }}
@@ -32,10 +32,10 @@ export default function FolderCard({ folder, receiptCount, onEdit, onDelete, ind
                 <FolderOpen className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <CardTitle className="text-lg font-bold text-slate-900 truncate">
+                <CardTitle className="text-lg font-bold text-foreground truncate">
                   {folder.name}
                 </CardTitle>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-muted">
                   {receiptCount} receipts
                 </p>
               </div>
@@ -43,7 +43,7 @@ export default function FolderCard({ folder, receiptCount, onEdit, onDelete, ind
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVertical className="w-4 h-4 text-slate-400" />
+                  <MoreVertical className="w-4 h-4 text-muted" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -64,7 +64,7 @@ export default function FolderCard({ folder, receiptCount, onEdit, onDelete, ind
         </CardHeader>
         {folder.description && (
           <CardContent>
-            <p className="text-sm text-slate-600 line-clamp-2">
+            <p className="text-sm text-muted line-clamp-2">
               {folder.description}
             </p>
           </CardContent>

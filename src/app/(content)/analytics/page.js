@@ -86,16 +86,16 @@ export default function AnalyticsPage() {
 
   return (
   <div className="p-4 md:p-8 min-h-full">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
               Analytics & Insights
             </h1>
-            <p className="text-slate-600">Visual breakdown of your spending patterns</p>
+            <p className="text-muted">Visual breakdown of your spending patterns</p>
           </div>
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-48 border-slate-200 bg-white/80 backdrop-blur-sm">
+            <SelectTrigger className="w-48 border-subtle bg-surface backdrop-blur-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -108,15 +108,15 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500">
                   <DollarSign className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500 font-medium">Total Spending</p>
-                  <p className="text-2xl font-bold text-slate-900">
+                  <p className="text-sm text-muted font-medium">Total Spending</p>
+                  <p className="text-2xl font-bold text-foreground">
                     ${getTotalSpending().toFixed(2)}
                   </p>
                 </div>
@@ -124,29 +124,29 @@ export default function AnalyticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500">
                   <ShoppingBag className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500 font-medium">Transactions</p>
-                  <p className="text-2xl font-bold text-slate-900">{filteredReceipts.length}</p>
+                  <p className="text-sm text-muted font-medium">Transactions</p>
+                  <p className="text-2xl font-bold text-foreground">{filteredReceipts.length}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500 font-medium">Average Transaction</p>
-                  <p className="text-2xl font-bold text-slate-900">
+                  <p className="text-sm text-muted font-medium">Average Transaction</p>
+                  <p className="text-2xl font-bold text-foreground">
                     ${getAverageTransaction().toFixed(2)}
                   </p>
                 </div>
@@ -154,15 +154,15 @@ export default function AnalyticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-red-500">
                   <Calendar className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500 font-medium">Categories</p>
-                  <p className="text-2xl font-bold text-slate-900">
+                  <p className="text-sm text-muted font-medium">Categories</p>
+                  <p className="text-2xl font-bold text-foreground">
                     {getCategoryData().length}
                   </p>
                 </div>
@@ -172,9 +172,9 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
-          <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-            <CardHeader className="border-b border-indigo-100/50">
-              <CardTitle className="text-xl font-bold text-slate-900">Spending by Category</CardTitle>
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+            <CardHeader className="border-b border-subtle">
+              <CardTitle className="text-xl font-bold text-foreground">Spending by Category</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <ResponsiveContainer width="100%" height={300}>
@@ -199,16 +199,21 @@ export default function AnalyticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-            <CardHeader className="border-b border-indigo-100/50">
-              <CardTitle className="text-xl font-bold text-slate-900">Top Merchants</CardTitle>
+          <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+            <CardHeader className="border-b border-subtle">
+              <CardTitle className="text-xl font-bold text-foreground">Top Merchants</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getMerchantData()} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#E0E7FF" />
                   <XAxis type="number" stroke="#64748B" />
-                  <YAxis dataKey="name" type="category" width={100} stroke="#64748B" />
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    width={100}
+                    stroke="#64748B"
+                  />
                   <Tooltip formatter={(value) => `$${value}`} />
                   <Bar dataKey="amount" fill="#6366F1" radius={[0, 8, 8, 0]} />
                 </BarChart>
@@ -217,39 +222,39 @@ export default function AnalyticsPage() {
           </Card>
         </div>
 
-        <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-          <CardHeader className="border-b border-indigo-100/50">
-            <CardTitle className="text-xl font-bold text-slate-900">Spending Trend Over Time</CardTitle>
+        <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+          <CardHeader className="border-b border-subtle">
+            <CardTitle className="text-xl font-bold text-foreground">Spending Trend Over Time</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <ResponsiveContainer width="100%" height={350}>
               <LineChart data={getMonthlyTrend()}>
                 <defs>
                   <linearGradient id="colorLine" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366F1" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0.1}/>
+                    <stop offset="5%" stopColor="#6366F1" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0.1} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E0E7FF" />
                 <XAxis dataKey="month" stroke="#64748B" />
                 <YAxis stroke="#64748B" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'white', 
-                    border: '1px solid #E0E7FF',
-                    borderRadius: '12px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "white",
+                    border: "1px solid #E0E7FF",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
                   }}
-                  formatter={(value) => [`$${value}`, 'Total']}
+                  formatter={(value) => [`$${value}`, "Total"]}
                 />
                 <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="total" 
-                  stroke="#6366F1" 
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#6366F1"
                   strokeWidth={3}
                   fill="url(#colorLine)"
-                  dot={{ fill: '#8B5CF6', r: 5 }}
+                  dot={{ fill: "#8B5CF6", r: 5 }}
                   activeDot={{ r: 7 }}
                 />
               </LineChart>

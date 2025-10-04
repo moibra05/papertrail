@@ -50,10 +50,10 @@ export default function Home() {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
               Welcome to PaperTrail
             </h1>
-            <p className="text-slate-600">Manage your receipts and track expenses effortlessly</p>
+            <p className="text-muted">Manage your receipts and track expenses effortlessly</p>
           </div>
           {/* <Link to={createPageUrl("Upload")}>
             <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg">

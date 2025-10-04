@@ -30,34 +30,34 @@ export default function SpendingChart({ receipts }) {
   };
 
   return (
-    <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
-      <CardHeader className="border-b border-indigo-100/50">
+    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg">
+      <CardHeader className="border-b border-subtle">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold text-slate-900">{getCurrentTitle()}</CardTitle>
+          <CardTitle className="text-xl font-bold text-foreground">{getCurrentTitle()}</CardTitle>
           <div className="relative">
             <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 focus:outline-none border border-slate-200 rounded-lg bg-white hover:bg-slate-50"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center gap-2 px-3 py-2 text-sm text-muted hover:text-foreground focus:outline-none border border-subtle rounded-lg bg-surface-solid hover:bg-input"
             >
                 {viewOptions.find(option => option.value === selectedView)?.label}
                 <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-lg shadow-lg z-20">
-                    {viewOptions.map(option => (
-                        <div
-                            key={option.value}
-                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-slate-100 ${selectedView === option.value ? 'bg-slate-100' : ''}`}
-                            onClick={() => {
-                                setSelectedView(option.value);
-                                setIsDropdownOpen(false);
-                            }}
-                        >
-                            {option.label}
-                        </div>
-                    ))}
-                </div>
+              <div className="absolute right-0 mt-2 w-40 bg-card border border-subtle rounded-lg shadow-lg contain-content">
+                {viewOptions.map(option => (
+                  <div
+                    key={option.value}
+                    className="px-4 py-2 text-sm cursor-pointer hover:bg-input border-b last:border-b-0"
+                    onClick={() => {
+                      setSelectedView(option.value);
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    {option.label}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

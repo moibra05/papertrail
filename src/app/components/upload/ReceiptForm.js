@@ -97,20 +97,20 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl">
-        <CardHeader className="border-b border-indigo-100/50">
-          <CardTitle className="text-2xl font-bold text-slate-900">Review & Edit Receipt</CardTitle>
+      <Card className="border-0 bg-surface backdrop-blur-sm shadow-xl">
+        <CardHeader className="border-b border-subtle">
+          <CardTitle className="text-2xl font-bold text-foreground">Review & Edit Receipt</CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="merchant">Merchant *</Label>
-              <Input
+                <Input
                 id="merchant"
                 value={formData.merchant}
                 onChange={(e) => handleChange('merchant', e.target.value)}
                 placeholder="Store or business name"
-                className="border-slate-200"
+                className="border-subtle"
               />
             </div>
 
@@ -121,7 +121,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 type="date"
                 value={formData.date}
                 onChange={(e) => handleChange('date', e.target.value)}
-                className="border-slate-200"
+                className="border-subtle"
               />
             </div>
 
@@ -133,7 +133,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 step="0.01"
                 value={formData.total_amount}
                 onChange={(e) => handleChange('total_amount', parseFloat(e.target.value))}
-                className="border-slate-200"
+                className="border-subtle"
               />
             </div>
 
@@ -145,14 +145,14 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 step="0.01"
                 value={formData.tax_amount}
                 onChange={(e) => handleChange('tax_amount', parseFloat(e.target.value))}
-                className="border-slate-200"
+                className="border-subtle"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
               <Select value={formData.category} onValueChange={(value) => handleChange('category', value)}>
-                <SelectTrigger className="border-slate-200">
+                <SelectTrigger className="border-subtle bg-surface">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -168,7 +168,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
             <div className="space-y-2">
               <Label htmlFor="payment_method">Payment Method</Label>
               <Select value={formData.payment_method} onValueChange={(value) => handleChange('payment_method', value)}>
-                <SelectTrigger className="border-slate-200">
+                <SelectTrigger className="border-subtle bg-surface">
                   <SelectValue placeholder="Select method" />
                 </SelectTrigger>
                 <SelectContent>
@@ -184,7 +184,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
             <div className="space-y-2">
               <Label htmlFor="folder">Folder (Optional)</Label>
               <Select value={formData.folder_id} onValueChange={(value) => handleChange('folder_id', value)}>
-                <SelectTrigger className="border-slate-200">
+                <SelectTrigger className="border-subtle bg-surface">
                   <SelectValue placeholder="Select a folder" />
                 </SelectTrigger>
                 <SelectContent>
@@ -211,7 +211,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 value={formData.receipt_number}
                 onChange={(e) => handleChange('receipt_number', e.target.value)}
                 placeholder="Transaction or receipt ID"
-                className="border-slate-200"
+                className="border-subtle"
               />
             </div>
           </div>
@@ -224,10 +224,10 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
               </Button>
             </div>
             {formData.items.length > 0 && (
-              <div className="border rounded-lg overflow-hidden">
+              <div className="border border-subtle rounded-lg overflow-hidden">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-slate-50">
+                    <TableRow className="bg-surface">
                       <TableHead>Description</TableHead>
                       <TableHead className="w-24">Qty</TableHead>
                       <TableHead className="w-28">Price</TableHead>
@@ -239,11 +239,11 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                     {formData.items.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell>
-                          <Input
+                            <Input
                             value={item.description}
                             onChange={(e) => handleItemChange(index, 'description', e.target.value)}
                             placeholder="Item"
-                            className="border-slate-200"
+                              className="border-subtle"
                           />
                         </TableCell>
                         <TableCell>
@@ -251,7 +251,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                             type="number"
                             value={item.quantity}
                             onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
-                            className="border-slate-200"
+                            className="border-subtle"
                           />
                         </TableCell>
                         <TableCell>
@@ -260,14 +260,14 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                             step="0.01"
                             value={item.unit_price}
                             onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))}
-                            className="border-slate-200"
+                            className="border-subtle"
                           />
                         </TableCell>
                         <TableCell>
                           <p className="font-medium">${(item.total || 0).toFixed(2)}</p>
                         </TableCell>
                         <TableCell>
-                          <Button
+                            <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => removeItem(index)}
@@ -291,7 +291,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="Add a tag"
-                className="border-slate-200"
+                className="border-subtle"
               />
               <Button onClick={addTag} variant="outline">
                 <Plus className="w-4 h-4" />
@@ -317,11 +317,11 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
               onChange={(e) => handleChange('notes', e.target.value)}
               placeholder="Additional details..."
               rows={3}
-              className="border-slate-200"
+              className="border-subtle"
             />
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end gap-3 border-t border-indigo-100/50 pt-6">
+        <CardFooter className="flex justify-end gap-3 border-t border-subtle pt-6">
           <Button variant="outline" onClick={onCancel}>
             Cancel
           </Button>
