@@ -1,31 +1,30 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-// import { Receipt as ReceiptEntity } from "@/entities/Receipt";
 import { Button } from "@/components/ui/button";
 import { Plus, Receipt, DollarSign, TrendingUp, Calendar } from "lucide-react";
+import Link from "next/link";
 
 import StatsCard from "../../components/dashboard/StatCards";
 import RecentReceipts from "../../components/dashboard/RecentReceipts";
 import SpendingChart from "../../components/dashboard/SpendingChart";
 import ReceiptDetailsModal from "../../components/reciepts/ReceiptDetailsModal";
+import { useUserClient } from "@/providers/UserProvider";
 import Link from "next/link";
 
 export default function Home() {
   const [receipts, setReceipts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedReceipt, setSelectedReceipt] = useState(null);
+  const { receipts: cachedReceipts, loading: userLoading } = useUserClient();
 
   useEffect(() => {
-    loadReceipts();
-  }, []);
-
-  const loadReceipts = async () => {
-    setIsLoading(true);
-    const data = await ReceiptEntity.list("-created_date");
-    setReceipts(data);
-    setIsLoading(false);
-  };
+    // prefer cached receipts from UserProvider if available
+    if (cachedReceipts && cachedReceipts.length > 0) {
+      setReceipts(cachedReceipts);
+      setIsLoading(false);
+    }
+  }, [cachedReceipts]);
 
   const getTotalSpending = () => {
     return receipts.reduce((sum, r) => sum + r.total_amount, 0);
@@ -47,7 +46,7 @@ export default function Home() {
   };
 
   return (
-  <div className="p-4 md:p-8 min-h-full">
+    <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
@@ -121,7 +120,7 @@ export default function Home() {
         receipt={selectedReceipt}
         open={!!selectedReceipt}
         onClose={() => setSelectedReceipt(null)}
-        onDelete={loadReceipts}
+        // onDelete={loadReceipts}
       />
     </div>
   );
