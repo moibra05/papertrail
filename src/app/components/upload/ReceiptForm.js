@@ -1,10 +1,22 @@
 import React from "react";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { X, Plus, Save } from "lucide-react";
 import { motion } from "framer-motion";
@@ -18,19 +30,33 @@ import {
 } from "@/components/ui/table";
 
 const CATEGORIES = [
-  "food_dining", "groceries", "transportation", "utilities", "healthcare",
-  "entertainment", "shopping", "travel", "business_services", "office_supplies",
-  "software_subscriptions", "other"
+  "food_dining",
+  "groceries",
+  "transportation",
+  "utilities",
+  "healthcare",
+  "entertainment",
+  "shopping",
+  "travel",
+  "business_services",
+  "office_supplies",
+  "software_subscriptions",
+  "other",
 ];
 
 const PAYMENT_METHODS = [
-  "credit_card", "debit_card", "cash", "bank_transfer", "digital_wallet", "other"
+  "credit_card",
+  "debit_card",
+  "cash",
+  "bank_transfer",
+  "digital_wallet",
+  "other",
 ];
 
 export default function ReceiptForm({ extractedData, onSave, onCancel }) {
   const [formData, setFormData] = React.useState({
     merchant: extractedData?.merchant || "",
-    date: extractedData?.date || new Date().toISOString().split('T')[0],
+    date: extractedData?.date || new Date().toISOString().split("T")[0],
     total_amount: extractedData?.total_amount || 0,
     category: extractedData?.category || "other",
     payment_method: extractedData?.payment_method || "",
@@ -40,7 +66,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
     notes: extractedData?.notes || "",
     tags: extractedData?.tags || [],
     folder_id: extractedData?.folder_id || "",
-    file_url: extractedData?.file_url || ""
+    file_url: extractedData?.file_url || "",
   });
 
   const [folders, setFolders] = React.useState([]);
@@ -56,50 +82,59 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
   };
 
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleItemChange = (index, field, value) => {
     const newItems = [...formData.items];
     newItems[index] = { ...newItems[index], [field]: value };
-    if (field === 'quantity' || field === 'unit_price') {
-      newItems[index].total = (newItems[index].quantity || 0) * (newItems[index].unit_price || 0);
+    if (field === "quantity" || field === "unit_price") {
+      newItems[index].total =
+        (newItems[index].quantity || 0) * (newItems[index].unit_price || 0);
     }
-    handleChange('items', newItems);
+    handleChange("items", newItems);
   };
 
   const addItem = () => {
-    handleChange('items', [...formData.items, {
-      description: '',
-      quantity: 1,
-      unit_price: 0,
-      total: 0
-    }]);
+    handleChange("items", [
+      ...formData.items,
+      {
+        description: "",
+        quantity: 1,
+        unit_price: 0,
+        total: 0,
+      },
+    ]);
   };
 
   const removeItem = (index) => {
-    handleChange('items', formData.items.filter((_, i) => i !== index));
+    handleChange(
+      "items",
+      formData.items.filter((_, i) => i !== index)
+    );
   };
 
   const addTag = () => {
     if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
-      handleChange('tags', [...formData.tags, newTag.trim()]);
+      handleChange("tags", [...formData.tags, newTag.trim()]);
       setNewTag("");
     }
   };
 
   const removeTag = (tagToRemove) => {
-    handleChange('tags', formData.tags.filter(tag => tag !== tagToRemove));
+    handleChange(
+      "tags",
+      formData.tags.filter((tag) => tag !== tagToRemove)
+    );
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
       <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl">
         <CardHeader className="border-b border-indigo-100/50">
-          <CardTitle className="text-2xl font-bold text-slate-900">Review & Edit Receipt</CardTitle>
+          <CardTitle className="text-2xl font-bold text-slate-900">
+            Review & Edit Receipt
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
@@ -108,7 +143,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
               <Input
                 id="merchant"
                 value={formData.merchant}
-                onChange={(e) => handleChange('merchant', e.target.value)}
+                onChange={(e) => handleChange("merchant", e.target.value)}
                 placeholder="Store or business name"
                 className="border-slate-200"
               />
@@ -120,7 +155,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 id="date"
                 type="date"
                 value={formData.date}
-                onChange={(e) => handleChange('date', e.target.value)}
+                onChange={(e) => handleChange("date", e.target.value)}
                 className="border-slate-200"
               />
             </div>
@@ -132,7 +167,9 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 type="number"
                 step="0.01"
                 value={formData.total_amount}
-                onChange={(e) => handleChange('total_amount', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleChange("total_amount", parseFloat(e.target.value))
+                }
                 className="border-slate-200"
               />
             </div>
@@ -144,21 +181,28 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 type="number"
                 step="0.01"
                 value={formData.tax_amount}
-                onChange={(e) => handleChange('tax_amount', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleChange("tax_amount", parseFloat(e.target.value))
+                }
                 className="border-slate-200"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
-              <Select value={formData.category} onValueChange={(value) => handleChange('category', value)}>
+              <Select
+                value={formData.category}
+                onValueChange={(value) => handleChange("category", value)}
+              >
                 <SelectTrigger className="border-slate-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {CATEGORIES.map(cat => (
+                  {CATEGORIES.map((cat) => (
                     <SelectItem key={cat} value={cat}>
-                      {cat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      {cat
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (l) => l.toUpperCase())}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -167,14 +211,19 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
 
             <div className="space-y-2">
               <Label htmlFor="payment_method">Payment Method</Label>
-              <Select value={formData.payment_method} onValueChange={(value) => handleChange('payment_method', value)}>
+              <Select
+                value={formData.payment_method}
+                onValueChange={(value) => handleChange("payment_method", value)}
+              >
                 <SelectTrigger className="border-slate-200">
                   <SelectValue placeholder="Select method" />
                 </SelectTrigger>
                 <SelectContent>
-                  {PAYMENT_METHODS.map(method => (
+                  {PAYMENT_METHODS.map((method) => (
                     <SelectItem key={method} value={method}>
-                      {method.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      {method
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (l) => l.toUpperCase())}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -183,17 +232,20 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
 
             <div className="space-y-2">
               <Label htmlFor="folder">Folder (Optional)</Label>
-              <Select value={formData.folder_id} onValueChange={(value) => handleChange('folder_id', value)}>
+              <Select
+                value={formData.folder_id}
+                onValueChange={(value) => handleChange("folder_id", value)}
+              >
                 <SelectTrigger className="border-slate-200">
                   <SelectValue placeholder="Select a folder" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={null}>No Folder</SelectItem>
-                  {folders.map(folder => (
+                  {folders.map((folder) => (
                     <SelectItem key={folder.id} value={folder.id}>
                       <div className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
+                        <div
+                          className="w-3 h-3 rounded-full"
                           style={{ backgroundColor: folder.color }}
                         />
                         {folder.name}
@@ -209,7 +261,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
               <Input
                 id="receipt_number"
                 value={formData.receipt_number}
-                onChange={(e) => handleChange('receipt_number', e.target.value)}
+                onChange={(e) => handleChange("receipt_number", e.target.value)}
                 placeholder="Transaction or receipt ID"
                 className="border-slate-200"
               />
@@ -241,7 +293,13 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                         <TableCell>
                           <Input
                             value={item.description}
-                            onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "description",
+                                e.target.value
+                              )
+                            }
                             placeholder="Item"
                             className="border-slate-200"
                           />
@@ -250,7 +308,13 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                           <Input
                             type="number"
                             value={item.quantity}
-                            onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "quantity",
+                                parseFloat(e.target.value)
+                              )
+                            }
                             className="border-slate-200"
                           />
                         </TableCell>
@@ -259,12 +323,20 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                             type="number"
                             step="0.01"
                             value={item.unit_price}
-                            onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "unit_price",
+                                parseFloat(e.target.value)
+                              )
+                            }
                             className="border-slate-200"
                           />
                         </TableCell>
                         <TableCell>
-                          <p className="font-medium">${(item.total || 0).toFixed(2)}</p>
+                          <p className="font-medium">
+                            ${(item.total || 0).toFixed(2)}
+                          </p>
                         </TableCell>
                         <TableCell>
                           <Button
@@ -289,7 +361,9 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
               <Input
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && (e.preventDefault(), addTag())
+                }
                 placeholder="Add a tag"
                 className="border-slate-200"
               />
@@ -314,7 +388,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
             <Textarea
               id="notes"
               value={formData.notes}
-              onChange={(e) => handleChange('notes', e.target.value)}
+              onChange={(e) => handleChange("notes", e.target.value)}
               placeholder="Additional details..."
               rows={3}
               className="border-slate-200"
