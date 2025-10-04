@@ -4,16 +4,21 @@ import {
   createPartFromUri,
 } from "@google/genai";
 import { geminiReceiptSchema, receiptSchema } from "@/entities/receipt";
+import { isAllowedReceiptFile } from "./shared";
 
 const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PRIVATE_GEMINI_API_KEY });
 const MODEL = "gemini-2.5-flash";
-const PROMPT = `Extract receipt data into this JSON schema:\n${receiptSchema}\nIf there is no data for a field, leave it blank ''. Return only JSON. 
-If a valid receipt cannot be identified in the input file, 
-respond with:
+const PROMPT = `
+You are a receipt extraction AI.
+
+- If a valid receipt is detected in the input (image, PDF, or text), extract its structured data according to the provided schema.
+- If no valid receipt or purchase information is found, respond exactly with:
 {
   "error": "No valid receipt found"
 }
-Otherwise, output a valid JSON object matching the given schema.`;
+
+Respond with empty fields if it is classified as a receipt and partial info is found.
+`;
 
 export async function extractReceipt(file) {
   try {
@@ -38,65 +43,13 @@ export async function extractReceipt(file) {
       },
     });
 
-    try {
-      return JSON.parse(response.text);
-    } catch (err) {
-      return { raw: response.text };
+    const result = JSON.parse(response.text || "{}");
+    if (result.error) {
+      throw new Error(result.error);
     }
+    return result;
   } catch (error) {
     console.error("Error extracting receipt:", error);
     throw error;
   }
-}
-
-export function isAllowedReceiptFile(file) {
-  if (!file) return false;
-
-  const mime = file.type?.toLowerCase() || "";
-  const name = file.name?.toLowerCase() || "";
-
-  const allowedImageTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    "image/webp",
-    "image/heic",
-    "image/tiff",
-  ];
-
-  const allowedTextTypes = [
-    "text/plain",
-    "text/markdown",
-    "text/csv",
-    "application/json",
-    "message/rfc822", // .eml
-  ];
-
-  const allowedExtensions = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-    ".webp",
-    ".heic",
-    ".tiff",
-    ".pdf",
-    ".txt",
-    ".md",
-    ".markdown",
-    ".csv",
-    ".json",
-    ".eml",
-    ".log",
-  ];
-
-  if (
-    allowedImageTypes.includes(mime) ||
-    allowedTextTypes.includes(mime) ||
-    mime === "application/pdf"
-  ) {
-    return true;
-  }
-
-  return allowedExtensions.some((ext) => name.endsWith(ext));
 }

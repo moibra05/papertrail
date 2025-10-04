@@ -3,13 +3,15 @@
 import React, { useState } from "react";
 // import { UploadFile, ExtractDataFromUploadedFile } from "@/integrations/Core";
 import { Card } from "@/components/ui/card";
-import { FileText, Image, FileCheck} from "lucide-react";
+import { FileText, Image, FileCheck } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 import UploadZone from "../../components/upload/UploadZone";
 import ReceiptForm from "../../components/upload/ReceiptForm";
+import { useReceiptExtraction } from "@/hooks/use-receipt-extraction";
+import { isAllowedReceiptFile } from "@/utils/shared";
 
 export default function UploadPage() {
   const [dragActive, setDragActive] = useState(false);
@@ -18,6 +20,11 @@ export default function UploadPage() {
   const [extractedData, setExtractedData] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const {
+    extractReceipt,
+    isLoading: isExtractReceiptLoading,
+    isError: isExtractReceiptError,
+  } = useReceiptExtraction();
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -36,8 +43,8 @@ export default function UploadPage() {
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    if (!file.type.match(/image.*/) && file.type !== "application/pdf") {
-      setError("Please upload an image or PDF file");
+    if (!isAllowedReceiptFile(file)) {
+      setError("Please upload an image, text or PDF file");
       return;
     }
 
@@ -48,23 +55,15 @@ export default function UploadPage() {
       const progressInterval = setInterval(() => {
         setProgress((prev) => Math.min(prev + 10, 80));
       }, 200);
-
-      const { file_url } = await UploadFile({ file });
+      
+      
       setProgress(85);
-
-      const result = await ExtractDataFromUploadedFile({
-        file_url,
-        json_schema: Receipt.schema(),
-      });
+      const receipt = await extractReceipt(file);
 
       clearInterval(progressInterval);
       setProgress(100);
-
-      if (result.status === "success" && result.output) {
-        setExtractedData({
-          ...result.output,
-          file_url,
-        });
+      if (!isExtractReceiptError) {
+        setExtractedData(receipt);
       } else {
         throw new Error("Could not extract data from receipt");
       }
@@ -97,7 +96,7 @@ export default function UploadPage() {
   };
 
   return (
-  <div className="p-4 md:p-8 min-h-full">
+    <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
@@ -135,47 +134,47 @@ export default function UploadPage() {
         {!extractedData ? (
           <div className="flex flex-col gap-5">
             <div>
-            <Card className="p-6">
-              <h3 className="font-semibold">How it works</h3>
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <FileText className="h-4 w-4 text-primary" />
+              <Card className="p-6">
+                <h3 className="font-semibold">How it works</h3>
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <FileText className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">1. Upload Receipt</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Drag and drop or select receipt images and PDFs
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-medium">1. Upload Receipt</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Drag and drop or select receipt images and PDFs
-                    </p>
-                  </div>
-                </div>
 
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Image className="h-4 w-4 text-primary" />
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Image className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">2. AI Processing</h4>
+                      <p className="text-sm text-muted-foreground">
+                        OCR extracts merchant, date, amount, and category
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-medium">2. AI Processing</h4>
-                    <p className="text-sm text-muted-foreground">
-                      OCR extracts merchant, date, amount, and category
-                    </p>
-                  </div>
-                </div>
 
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <FileCheck className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">3. Review & Save</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Verify extracted data and organize into folders
-                    </p>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <FileCheck className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">3. Review & Save</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Verify extracted data and organize into folders
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          </div>
+              </Card>
+            </div>
             <div>
               <UploadZone
                 onFileSelect={handleFileSelect}
@@ -183,8 +182,7 @@ export default function UploadPage() {
                 onDrag={handleDrag}
               />
             </div>
-        </div>
-          
+          </div>
         ) : (
           <ReceiptForm
             extractedData={extractedData}
