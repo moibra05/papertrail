@@ -65,7 +65,7 @@ export default function RootLayout({ children }) {
               </div>
               <div>
                 <h2 className="font-bold text-xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                  FinTrack
+                  PaperTrail
                 </h2>
                 <p className="text-xs text-slate-500 font-medium">
                   Smart Receipt Manager
@@ -133,7 +133,7 @@ export default function RootLayout({ children }) {
             <div className="flex items-center gap-4">
               <SidebarTrigger className="hover:bg-indigo-50 p-2 rounded-lg transition-colors duration-200" />
               <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                FinTrack
+                PaperTrail
               </h1>
             </div>
           </header>
