@@ -19,12 +19,15 @@ export function useReceiptPost() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to post receipt");
+        const errorData = await response.text();
+        throw new Error(`Failed to post receipt: ${response.status} - ${errorData}`);
       }
 
-      return await response.json();
+      const result = await response.json();
+      return result;
     } catch (err) {
       setError(err.message);
+      throw err; // Re-throw the error so the calling code can handle it
     } finally {
       setIsLoading(false);
     }
