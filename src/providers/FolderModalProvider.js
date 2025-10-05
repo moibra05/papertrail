@@ -248,7 +248,7 @@ export function FolderModalProvider({ children }) {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/80 text-foreground"
+                  className="bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/80 text-background"
                 >
                   {editingFolder ? "Update Folder" : "Create Folder"}
                 </Button>
