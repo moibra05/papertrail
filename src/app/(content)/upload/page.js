@@ -298,7 +298,7 @@ export default function UploadPage() {
           <Button 
             onClick={handleScrapeEmails}
             disabled={scrapingEmails || processing || processingEmails}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 border-2 bg-blue-500 text-white hover:bg-blue-600 hover:text-white border-blue-500 hover:border-blue-600 dark:bg-transparent dark:text-white dark:border-white dark:hover:border-gray-200 dark:hover:bg-transparent"
             variant="outline"
           >
             <Mail className="h-4 w-4" />
