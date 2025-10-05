@@ -20,7 +20,6 @@ export async function POST(request) {
 
     if (contentType.includes("application/json")) {
       const body = await request.json();
-      console.log(body);
       // validate required fields
       const { merchant, purchase_date, total_amount } = body;
       if (
@@ -42,7 +41,6 @@ export async function POST(request) {
         data: { user },
         error: authError,
       } = await supabase.auth.getUser();
-      console.log("Authenticated user:", user, authError);
       if (authError || !user) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
@@ -50,6 +48,35 @@ export async function POST(request) {
         });
       }
       const userId = user.id;
+      const file = body.file;
+      console.log("File from body:", file);
+      console.log("body:", body);
+
+      if (!file) {
+        return new Response(JSON.stringify({ error: "No file provided" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = new Uint8Array(arrayBuffer); // Supabase expects a typed array or Blob
+
+      const filePath = `${user.id}/${Date.now()}-${file.name}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("Receipt Pictures")
+        .upload(filePath, buffer, {
+          contentType: file.type,
+        });
+
+      if (uploadError) {
+        console.error(uploadError);
+        return new Response(JSON.stringify({ error: "File upload failed" }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
 
       const payload = {
         merchant,
@@ -63,11 +90,10 @@ export async function POST(request) {
         items: body.items || null,
         notes: body.notes || null,
         folder_id: body.folder_id || null,
-        file_url: body.file_url || null,
+        file_url,
         tags: body.tags || null,
         user: userId,
       };
-      console.log("Inserting receipt with payload:", payload);
 
       const inserted = await insertReceipt(payload);
       return new Response(JSON.stringify({ receipt: inserted }), {
