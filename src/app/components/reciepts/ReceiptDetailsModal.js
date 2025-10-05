@@ -25,6 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import ReceiptFileDisplay from "./ReceiptFileDisplay";
 
 export default function ReceiptDetailsModal({
   receipt,
@@ -192,18 +193,11 @@ export default function ReceiptDetailsModal({
 
           {receipt.file_url && (
             <div>
-              <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
-                Original Receipt
-              </h3>
-              <a
-                href={receipt.file_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
-              >
-                <ExternalLink className="w-4 h-4" />
-                View Original Receipt
-              </a>
+                <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
+                  Original Receipt
+                </h3>
+                
+              <ReceiptFileDisplay path={receipt.file_url} />
             </div>
           )}
 

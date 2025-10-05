@@ -87,12 +87,12 @@ export default function UploadPage() {
   const handleSave = async (formData) => {
     setProcessing(true);
     try {
-      let fileUrl = "";
+      let file_url = "";
       if (formData.file) {
-        fileUrl = await uploadFile(formData.file);
+        file_url = await uploadFile(formData.file);
       }
 
-      const saved = await postReceipt({ ...formData, fileUrl });
+      const saved = await postReceipt({ ...formData, file_url });
       if (!saved || saved.error) {
         throw new Error(saved?.error || "Failed to save receipt");
       }

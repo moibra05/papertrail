@@ -27,5 +27,5 @@ export default async function uploadFile(file) {
     );
   }
 
-  return filename;
+  return path;
 }
