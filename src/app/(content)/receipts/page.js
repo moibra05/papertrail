@@ -77,8 +77,8 @@ export default function ReceiptsPage() {
         return matchesSearch && matchesCategory;
       })
       .sort((a, b) => {
-        if (dateSort === "newest") return new Date(b.date) - new Date(a.date);
-        if (dateSort === "oldest") return new Date(a.date) - new Date(b.date);
+        if (dateSort === "newest") return new Date(b.purchase_date) - new Date(a.purchase_date);
+        if (dateSort === "oldest") return new Date(a.purchase_date) - new Date(b.purchase_date);
         if (dateSort === "highest") return b.total_amount - a.total_amount;
         if (dateSort === "lowest") return a.total_amount - b.total_amount;
         return 0;

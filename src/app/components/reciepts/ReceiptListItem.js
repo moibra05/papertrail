@@ -39,7 +39,7 @@ export default function ReceiptListItem({ receipt, onClick }) {
           <div className="flex items-center gap-2 mt-1">
             <Calendar className="w-3 h-3 text-muted" />
             <p className="text-sm text-muted">
-              {format(new Date(receipt.date), "MMM d, yyyy")}
+              {format(new Date(receipt.purchase_date), "MMM d, yyyy")}
             </p>
           </div>
         </div>

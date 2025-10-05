@@ -56,7 +56,7 @@ const PAYMENT_METHODS = [
 export default function ReceiptForm({ extractedData, onSave, onCancel }) {
   const [formData, setFormData] = React.useState({
     merchant: extractedData?.merchant || "",
-    date: extractedData?.date || new Date().toISOString().split("T")[0],
+    purschase_date: extractedData?.purhase_date || "",
     total_amount: extractedData?.total_amount || 0,
     category: extractedData?.category || "other",
     payment_method: extractedData?.payment_method || "",
@@ -67,7 +67,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
     tags: extractedData?.tags || [],
     folder_id: extractedData?.folder_id || "",
   });
-
+  console.log("formData:", formData);
   const [folders, setFolders] = React.useState([]);
   const [newTag, setNewTag] = React.useState("");
 
@@ -150,12 +150,12 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="date">Date *</Label>
+              <Label htmlFor="purchase_date">Purchase Date *</Label>
               <Input
-                id="date"
+                id="purchase_date"
                 type="date"
-                value={formData.date}
-                onChange={(e) => handleChange('date', e.target.value)}
+                value={formData.purchase_date}
+                onChange={(e) => handleChange('purchase_date', e.target.value)}
                 className="border-subtle"
               />
             </div>

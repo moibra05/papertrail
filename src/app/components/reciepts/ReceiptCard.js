@@ -41,7 +41,7 @@ export default function ReceiptCard({ receipt, onClick }) {
                 <h3 className="font-bold text-foreground truncate">{receipt.merchant}</h3>
               </div>
               <p className="text-sm text-muted">
-                {format(new Date(receipt.date), "MMMM d, yyyy")}
+                {format(new Date(receipt.purchase_date), "MMMM d, yyyy")}
               </p>
             </div>
             {receipt.file_url && (

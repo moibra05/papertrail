@@ -8,7 +8,7 @@ export const receiptSchema = {
       type: "string",
       description: "Name of the merchant/vendor",
     },
-    date: {
+    purchase_date: {
       type: "string",
       format: "date",
       description: "Date of purchase",
@@ -102,7 +102,7 @@ export const receiptSchema = {
       description: "Custom tags for organization",
     },
   },
-  required: ["merchant", "date", "total_amount"],
+  required: ["merchant", "purchase_date", "total_amount"],
 };
 
 export const geminiReceiptSchema = {

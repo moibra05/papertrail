@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import UploadZone from "../../components/upload/UploadZone";
 import ReceiptForm from "../../components/upload/ReceiptForm";
 import { useReceiptExtraction } from "@/hooks/use-receipt-extraction";
+import { useReceiptPost } from "@/hooks/use-receipt-post";
 import { isAllowedReceiptFile } from "@/utils/shared";
 
 export default function UploadPage() {
@@ -25,6 +26,7 @@ export default function UploadPage() {
     isLoading: isExtractReceiptLoading,
     isError: isExtractReceiptError,
   } = useReceiptExtraction();
+  const { postReceipt } = useReceiptPost();
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -78,7 +80,7 @@ export default function UploadPage() {
   const handleSave = async (formData) => {
     setProcessing(true);
     try {
-      await Receipt.create(formData);
+      await postReceipt(formData);
       setSuccess("Receipt saved successfully!");
       setTimeout(() => {
         navigate(createPageUrl("Receipts"));
@@ -94,7 +96,7 @@ export default function UploadPage() {
     setExtractedData(null);
     setProgress(0);
   };
-
+  console.log({ extractedData });
   return (
     <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -156,7 +158,7 @@ export default function UploadPage() {
                   <div>
                     <h4 className="font-medium">2. AI Processing</h4>
                     <p className="text-sm text-muted">
-                      OCR extracts merchant, date, amount, and category
+                      OCR extracts merchant, purchase date, amount, and category
                     </p>
                   </div>
                 </div>
