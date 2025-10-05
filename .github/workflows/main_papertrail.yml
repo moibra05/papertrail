@@ -54,6 +54,10 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C3032BD0E7994EE5BE3136FFC8DF93DD }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C7DBC658F98F4B2F9897A655D56769EB }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8BC8232182964DA6946F7B48261482B4 }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+          NEXT_PRIVATE_GEMINI_API_KEY: ${{ secrets.NEXT_PRIVATE_GEMINI_API_KEY }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -62,4 +66,5 @@ jobs:
           app-name: 'papertrail'
           slot-name: 'Production'
           package: .
+
           
