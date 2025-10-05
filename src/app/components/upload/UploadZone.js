@@ -3,8 +3,9 @@ import { Card } from "@/components/ui/card";
 import { Upload, Camera, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
-export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
+export default function UploadZone({ onFileSelect, dragActive, onDrag, onManualEntry }) {
   const fileInputRef = React.useRef(null);
   const openFilePicker = React.useCallback(() => {
     fileInputRef.current?.click();
@@ -162,7 +163,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           }
         }}
       >
-        <div className="p-12 text-center">
+        <div className="p-12 pb-0 text-center">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -217,6 +218,17 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
           <p className="text-xs text-muted mt-6">
             Supports: JPG, PNG, PDF • Max 10MB per file
           </p>
+          {onManualEntry && (
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={onManualEntry}
+                className="text-sm text-blue-400 hover:text-blue-500 hover:underline"
+              >
+                Enter receipt details manually
+              </button>
+            </div>
+          )}
         </div>
       </Card>
     </div>
