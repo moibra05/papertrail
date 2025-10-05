@@ -4,10 +4,6 @@ import SidebarComponent from "../components/sidebar";
 export default function RootLayout({ children }) {
   return (
     <SidebarProvider>
-      <style>{`
-        :root {
-        }
-      `}</style>
       <div className="min-h-screen flex w-full bg-app">
         <SidebarComponent />
         <main className="flex-1 flex flex-col">

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { Receipt } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -48,7 +49,15 @@ export default function ResetPasswordPage() {
           onSubmit={form.handleSubmit(resetPassword)}
           className="flex flex-col gap-8 p-8 rounded bg-secondary"
         >
-          <h2 className="">Reset your password</h2>
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-xl bg-[var(--primary)] p-2 shadow-md mx-auto flex items-center justify-center text-white mb-4">
+              <Receipt className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold">Reset your password</h2>
+            <p className="text-sm text-muted mt-2">
+              Choose a new password for your account.
+            </p>
+          </div>
 
           <FormField
             control={form.control}

@@ -16,6 +16,10 @@ export default function ThemeToggle() {
     }
   });
 
+  // avoid rendering theme-dependent UI until after mount to prevent
+  // hydration mismatches between server and client
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     try {
       if (theme === "dark") {
@@ -30,6 +34,10 @@ export default function ThemeToggle() {
     }
   }, [theme]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   return (
@@ -39,12 +47,19 @@ export default function ThemeToggle() {
       title="Toggle color theme"
       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-muted hover:text-foreground hover:bg-input/10 rounded-lg transition-colors duration-200"
     >
-      {theme === "dark" ? (
-        <Sun className="w-4 h-4" />
+      {mounted ? (
+        theme === "dark" ? (
+          <Sun className="w-4 h-4" />
+        ) : (
+          <Moon className="w-4 h-4" />
+        )
       ) : (
-        <Moon className="w-4 h-4" />
+        // placeholder to keep DOM stable during SSR -> hydration
+        <span className="w-4 h-4 inline-block" aria-hidden />
       )}
-      <span className="font-medium">{theme === "dark" ? "Light" : "Dark"}</span>
+      <span className="font-medium">
+        {mounted ? (theme === "dark" ? "Light" : "Dark") : "Theme"}
+      </span>
     </button>
   );
 }
