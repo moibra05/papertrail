@@ -113,7 +113,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
 
   if (showCamera) {
     return (
-      <Card className="border-2 border-blue-200 bg-surface backdrop-blur-sm shadow-xl">
+      <Card className="bg-surface backdrop-blur-sm shadow-xl">
         <div className="p-6">
           <video
             ref={videoRef}
