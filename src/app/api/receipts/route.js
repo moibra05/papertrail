@@ -48,35 +48,6 @@ export async function POST(request) {
         });
       }
       const userId = user.id;
-      const file = body.file;
-      console.log("File from body:", file);
-      console.log("body:", body);
-
-      if (!file) {
-        return new Response(JSON.stringify({ error: "No file provided" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
-
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = new Uint8Array(arrayBuffer); // Supabase expects a typed array or Blob
-
-      const filePath = `${user.id}/${Date.now()}-${file.name}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("Receipt Pictures")
-        .upload(filePath, buffer, {
-          contentType: file.type,
-        });
-
-      if (uploadError) {
-        console.error(uploadError);
-        return new Response(JSON.stringify({ error: "File upload failed" }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
 
       const payload = {
         merchant,
@@ -90,7 +61,7 @@ export async function POST(request) {
         items: body.items || null,
         notes: body.notes || null,
         folder_id: body.folder_id || null,
-        file_url,
+        file_url: body.file_url || null,
         tags: body.tags || null,
         user: userId,
       };

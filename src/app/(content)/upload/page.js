@@ -12,6 +12,7 @@ import { useReceiptExtraction } from "@/hooks/use-receipt-extraction";
 import { useReceiptPost } from "@/hooks/use-receipt-post";
 import { useUserClient } from "@/providers/UserProvider";
 import { isAllowedReceiptFile } from "@/utils/shared";
+import uploadFile from "./upload-file";
 
 export default function UploadPage() {
   const [dragActive, setDragActive] = useState(false);
@@ -67,12 +68,10 @@ export default function UploadPage() {
       setProgress(85);
       const receipt = await extractReceipt(file);
       receipt.file = file;
-      console.log(receipt);
       clearInterval(progressInterval);
       setProgress(100);
       if (!isExtractReceiptError) {
         setExtractedData(receipt);
-        
       } else {
         throw new Error("Could not extract data from receipt");
       }
@@ -83,12 +82,17 @@ export default function UploadPage() {
       setProcessing(false);
     }
   };
+    
 
   const handleSave = async (formData) => {
     setProcessing(true);
     try {
-      console.log("Saving formData:", formData);
-      const saved = await postReceipt(formData);
+      let fileUrl = "";
+      if (formData.file) {
+        fileUrl = await uploadFile(formData.file);
+      }
+
+      const saved = await postReceipt({ ...formData, fileUrl });
       if (!saved || saved.error) {
         throw new Error(saved?.error || "Failed to save receipt");
       }
