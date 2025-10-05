@@ -32,7 +32,7 @@ function HeaderControls() {
   return (
     <Button
       onClick={handleClick}
-      className="bg-gradient-to-r from-primary to-primary/90 hover:bg-primary/80 shadow-lg"
+      className="bg-gradient-to-r from-primary to-primary/90 hover:bg-primary/80 shadow-lg text-foreground"
     >
       <Plus className="w-5 h-5 mr-2" />
       New Folder
@@ -47,10 +47,10 @@ export default function FolderLayout({ children }) {
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
                 Folders
               </h1>
-              <p className="text-slate-600">
+              <p className="text-muted-foreground">
                 Organize your receipts into folders
               </p>
             </div>
