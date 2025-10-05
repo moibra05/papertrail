@@ -32,7 +32,7 @@ function HeaderControls() {
   return (
     <Button
       onClick={handleClick}
-      className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg"
+      className="bg-gradient-to-r from-primary to-primary/90 hover:bg-primary/80 shadow-lg"
     >
       <Plus className="w-5 h-5 mr-2" />
       New Folder

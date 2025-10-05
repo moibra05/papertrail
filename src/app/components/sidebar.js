@@ -93,7 +93,7 @@ export default function SidebarComponent() {
                     className={cn(
                       "hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 rounded-xl mb-1",
                       pathname === item.url
-                        ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/30"
+                        ? "bg-gradient-to-r from-primary to-primary/90 text-white shadow-lg shadow-indigo-500/30"
                         : ""
                     )}
                   >
@@ -121,7 +121,7 @@ export default function SidebarComponent() {
           <ThemeToggle />
 
           <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg dark:shadow-gray-500/10">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-semibold shadow-lg dark:shadow-gray-500/10">
               {user?.user_metadata?.full_name?.[0]?.toUpperCase() || "U"}
             </div>
             <div className="flex-1 min-w-0">
