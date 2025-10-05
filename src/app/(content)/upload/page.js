@@ -229,7 +229,8 @@ export default function UploadPage() {
                   continue;
                 }
               }
-              
+
+              receiptData.file_url = "gmail.jpg";
               const dbResult = await postReceipt(receiptData);
               
               processedResults.push({
