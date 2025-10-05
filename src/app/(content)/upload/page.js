@@ -192,6 +192,12 @@ export default function UploadPage() {
                   onFileSelect={handleFileSelect}
                   dragActive={dragActive}
                   onDrag={handleDrag}
+                  onManualEntry={() => {
+                    setError(null);
+                    setSuccess(null);
+                    setProgress(0);
+                    setExtractedData({});
+                  }}
                 />
               ) : null}
             </div>
