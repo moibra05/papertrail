@@ -30,7 +30,7 @@ export default function SpendingChart({ receipts }) {
   };
 
   return (
-    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 dark:shadow-gray-500/10">
+    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10">
       <CardHeader className="border-b border-subtle">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-bold text-foreground">{getCurrentTitle()}</CardTitle>

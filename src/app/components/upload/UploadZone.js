@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 
 export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
   const fileInputRef = React.useRef(null);
+  const openFilePicker = React.useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
   const [showCamera, setShowCamera] = React.useState(false);
   const videoRef = React.useRef(null);
   const streamRef = React.useRef(null);
@@ -113,7 +116,7 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
 
   if (showCamera) {
     return (
-      <Card className="border-2 border-blue-200 bg-surface backdrop-blur-sm shadow-xl">
+      <Card className="bg-surface backdrop-blur-sm shadow-xl">
         <div className="p-6">
           <video
             ref={videoRef}
@@ -164,7 +167,17 @@ export default function UploadZone({ onFileSelect, dragActive, onDrag }) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl"
+            className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onClick={openFilePicker}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openFilePicker();
+              }
+            }}
+            aria-label="Open file picker"
           >
             <Upload className="w-10 h-10 text-white" />
           </motion.div>

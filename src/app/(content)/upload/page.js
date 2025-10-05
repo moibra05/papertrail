@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-// import { UploadFile, ExtractDataFromUploadedFile } from "@/integrations/Core";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { FileText, Image, FileCheck } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-
 import UploadZone from "../../components/upload/UploadZone";
 import ReceiptForm from "../../components/upload/ReceiptForm";
 import { useReceiptExtraction } from "@/hooks/use-receipt-extraction";
@@ -27,6 +25,7 @@ export default function UploadPage() {
     isError: isExtractReceiptError,
   } = useReceiptExtraction();
   const { postReceipt } = useReceiptPost();
+  const router = useRouter();
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -57,8 +56,7 @@ export default function UploadPage() {
       const progressInterval = setInterval(() => {
         setProgress((prev) => Math.min(prev + 10, 80));
       }, 200);
-      
-      
+
       setProgress(85);
       const receipt = await extractReceipt(file);
 
@@ -83,7 +81,7 @@ export default function UploadPage() {
       await postReceipt(formData);
       setSuccess("Receipt saved successfully!");
       setTimeout(() => {
-        navigate(createPageUrl("Receipts"));
+        router.push("/receipts");
       }, 1500);
     } catch (err) {
       setError("Error saving receipt. Please try again.");
@@ -123,66 +121,76 @@ export default function UploadPage() {
           </Alert>
         )}
 
-        {processing && !extractedData && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm text-muted">
-              <span>Processing receipt...</span>
-              <span>{progress}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-        )}
-
         {!extractedData ? (
           <div className="flex flex-col gap-5">
             <div>
-            <Card className="p-6 bg-surface">
-              <h3 className="font-semibold">How it works</h3>
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <FileText className="h-4 w-4 text-primary" />
+              <Card className="p-6 bg-surface">
+                <h3 className="font-semibold">How it works</h3>
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <FileText className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">1. Upload Receipt</h4>
+                      <p className="text-sm text-muted">
+                        Drag and drop or select receipt images and PDFs
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-medium">1. Upload Receipt</h4>
-                    <p className="text-sm text-muted">
-                      Drag and drop or select receipt images and PDFs
-                    </p>
+
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Image className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">2. AI Processing</h4>
+                      <p className="text-sm text-muted">
+                        OCR extracts merchant, purchase date, amount, and
+                        category
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <FileCheck className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">3. Review & Save</h4>
+                      <p className="text-sm text-muted">
+                        Verify extracted data and organize into folders
+                      </p>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Image className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">2. AI Processing</h4>
-                    <p className="text-sm text-muted">
-                      OCR extracts merchant, purchase date, amount, and category
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <FileCheck className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">3. Review & Save</h4>
-                    <p className="text-sm text-muted">
-                      Verify extracted data and organize into folders
-                    </p>
-                  </div>
+              </Card>
+            </div>
+            {processing && !extractedData && (
+              <div className="flex justify-center">
+                <div className="w-full h-full">
+                  <Card className="p-8 flex flex-col items-center justify-center bg-surface">
+                    <div className="mb-4 text-center text-muted">
+                      Processing receipt...
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <div
+                        className="w-18 h-18 border-8 border-gray-200 border-t-blue-500 rounded-full animate-spin"
+                        aria-hidden
+                      />
+                    </div>
+                  </Card>
                 </div>
               </div>
-            </Card>
-          </div>
+            )}
             <div>
-              <UploadZone
-                onFileSelect={handleFileSelect}
-                dragActive={dragActive}
-                onDrag={handleDrag}
-              />
+              {!processing ? (
+                <UploadZone
+                  onFileSelect={handleFileSelect}
+                  dragActive={dragActive}
+                  onDrag={handleDrag}
+                />
+              ) : null}
             </div>
           </div>
         ) : (

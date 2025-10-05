@@ -17,11 +17,13 @@ import {
   ChevronDown,
   ChevronRight,
   FolderOpen,
+  FolderClosed,
   FileText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useUserClient } from "@/providers/UserProvider";
 
 import ReceiptCard from "@/app/components/reciepts/ReceiptCard";
 import ReceiptDetailsModal from "@/app/components/reciepts/ReceiptDetailsModal";
@@ -37,27 +39,12 @@ export default function ReceiptsPage() {
   const [dateSort, setDateSort] = useState("newest");
   const [viewMode, setViewMode] = useState("grid");
   const [expandedFolders, setExpandedFolders] = useState({});
+  const userClient = useUserClient();
 
   useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    const [receiptsData, foldersData] = await Promise.all([
-      Receipt.list("-created_date"),
-      FolderEntity.list("-created_date"),
-    ]);
-    setReceipts(receiptsData);
-    setFolders(foldersData);
-
-    const expanded = {};
-    foldersData.forEach((f) => (expanded[f.id] = true));
-    expanded["no-folder"] = true;
-    setExpandedFolders(expanded);
-
-    setIsLoading(false);
-  };
+    setReceipts(userClient.receipts);
+    setFolders(userClient.folders);
+  }, [userClient]);
 
   const toggleFolder = (folderId) => {
     setExpandedFolders((prev) => ({
@@ -98,7 +85,7 @@ export default function ReceiptsPage() {
   };
 
   return (
-  <div className="p-4 md:p-8 min-h-full">
+    <div className="p-4 md:p-8 min-h-full">
       <div className="max-w-7xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
@@ -118,13 +105,13 @@ export default function ReceiptsPage() {
                   placeholder="Search receipts..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-subtle"
+                  className="pl-10 border-slate-200"
                 />
               </div>
 
               <div className="flex gap-2">
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-full md:w-40 border-subtle bg-surface">
+                  <SelectTrigger className="w-full md:w-40 border-slate-200 bg-surface">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -144,7 +131,7 @@ export default function ReceiptsPage() {
                 </Select>
 
                 <Select value={dateSort} onValueChange={setDateSort}>
-                  <SelectTrigger className="w-full md:w-40 border-subtle bg-surface">
+                  <SelectTrigger className="w-full md:w-40 border-slate-200 bg-surface">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -162,7 +149,7 @@ export default function ReceiptsPage() {
                 Showing {getTotalFilteredReceipts()} of {receipts.length} receipts
               </p>
               
-              <div className="flex gap-1 border border-subtle rounded-lg p-1">
+              <div className="flex gap-1 border border-slate-200 rounded-lg p-1">
                 <Button
                   variant={viewMode === "grid" ? "secondary" : "ghost"}
                   size="sm"
@@ -190,7 +177,7 @@ export default function ReceiptsPage() {
             if (folderReceipts.length === 0) return null;
 
             return (
-              <Card key={folder.id} className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden">
+              <Card key={folder.id} className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden py-0 gap-0">
                 <div
                   className="flex items-center gap-3 p-4 cursor-pointer hover:bg-input/10 transition-colors"
                   onClick={() => toggleFolder(folder.id)}
@@ -207,7 +194,11 @@ export default function ReceiptsPage() {
                     className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md dark:shadow-gray-500/10"
                     style={{ backgroundColor: folder.color }}
                   >
-                    <FolderOpen className="w-5 h-5 text-white" />
+                    {expandedFolders[folder.id] ? (
+                      <FolderOpen className="w-5 h-5 text-white" />
+                    ) : (
+                      <FolderClosed className="w-5 h-5 text-white" />
+                    )}
                   </div>
 
                   <div className="flex-1">
@@ -215,7 +206,7 @@ export default function ReceiptsPage() {
                     <p className="text-sm text-muted">{folderReceipts.length} receipts</p>
                   </div>
 
-                  <Badge variant="outline" className="border-subtle">
+                  <Badge variant="outline" className="border-slate-200">
                     ${folderReceipts.reduce((sum, r) => sum + r.total_amount, 0).toFixed(2)}
                   </Badge>
                 </div>
@@ -257,7 +248,7 @@ export default function ReceiptsPage() {
           })}
 
           {getReceiptsWithoutFolder().length > 0 && (
-            <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden">
+            <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 overflow-hidden p-0 gap-0">
               <div
                 className="flex items-center gap-3 p-4 cursor-pointer hover:bg-input/10 transition-colors"
                 onClick={() => toggleFolder('no-folder')}
@@ -279,7 +270,7 @@ export default function ReceiptsPage() {
                   <p className="text-sm text-muted">{getReceiptsWithoutFolder().length} receipts</p>
                 </div>
 
-                <Badge variant="outline" className="border-subtle">
+                <Badge variant="outline" className="border-slate-200">
                   ${getReceiptsWithoutFolder().reduce((sum, r) => sum + r.total_amount, 0).toFixed(2)}
                 </Badge>
               </div>
@@ -333,7 +324,7 @@ export default function ReceiptsPage() {
         receipt={selectedReceipt}
         open={!!selectedReceipt}
         onClose={() => setSelectedReceipt(null)}
-        onDelete={loadData}
+        onDelete={userClient.refresh}
       />
     </div>
   );
