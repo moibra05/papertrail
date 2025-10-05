@@ -40,11 +40,6 @@ const navigationItems = [
     icon: Upload,
   },
   {
-    title: "Analytics",
-    url: "/analytics",
-    icon: BarChart3,
-  },
-  {
     title: "All Receipts",
     url: "/receipts",
     icon: Receipt,
@@ -91,10 +86,10 @@ export default function SidebarComponent() {
                   <SidebarMenuButton
                     asChild
                     className={cn(
-                      "hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 rounded-xl mb-1",
+                      "transition-all duration-200 rounded-xl mb-1",
                       pathname === item.url
-                        ? "bg-gradient-to-r from-primary to-primary/90 text-white shadow-lg shadow-indigo-500/30"
-                        : ""
+                        ? "bg-gradient-to-r from-primary to-primary/90 text-white shadow-lg hover:text-white"
+                        : "hover:bg-blue-50 hover:text-blue-700"
                     )}
                   >
                     <Link
