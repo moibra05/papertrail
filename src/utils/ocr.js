@@ -17,7 +17,9 @@ You are a receipt extraction AI.
   "error": "No valid receipt found"
 }
 
-Respond with empty fields if it is classified as a receipt and partial info is found. For items, include discounts as a negative-priced item.
+Respond with empty fields if it is classified as a receipt and partial info is found. For items, include discounts as a negative-priced item. Each discount line
+should be its own item with quantity: 1, and price: <discount_price>. also ensure
+the sum of item totals and tax_amount matches the total_amount if possible.
 `;
 
 export async function extractReceipt(file) {
@@ -27,15 +29,12 @@ export async function extractReceipt(file) {
     }
 
     // Handle .eml files differently - read as text instead of file upload
-    if (file.type === 'message/rfc822' || file.name?.endsWith('.eml')) {
+    if (file.type === "message/rfc822" || file.name?.endsWith(".eml")) {
       const emailText = await file.text();
-      
+
       const response = await ai.models.generateContent({
         model: MODEL,
-        contents: createUserContent([
-          emailText,
-          PROMPT,
-        ]),
+        contents: createUserContent([emailText, PROMPT]),
         config: {
           responseMimeType: "application/json",
           responseSchema: geminiReceiptSchema,
