@@ -133,7 +133,7 @@ export function FolderModalProvider({ children }) {
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-slate-900">
+            <DialogTitle className="text-2xl font-bold text-foreground">
               {editingFolder ? "Edit Folder" : "Create New Folder"}
             </DialogTitle>
           </DialogHeader>
@@ -248,7 +248,7 @@ export function FolderModalProvider({ children }) {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                  className="bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/80 text-foreground"
                 >
                   {editingFolder ? "Update Folder" : "Create Folder"}
                 </Button>
