@@ -56,7 +56,7 @@ const PAYMENT_METHODS = [
 export default function ReceiptForm({ extractedData, onSave, onCancel }) {
   const [formData, setFormData] = React.useState({
     merchant: extractedData?.merchant || "",
-    purschase_date: extractedData?.purhase_date || "",
+    purschase_date: extractedData?.purchase_date || "",
     total_amount: extractedData?.total_amount || 0,
     category: extractedData?.category || "other",
     payment_method: extractedData?.payment_method || "",
