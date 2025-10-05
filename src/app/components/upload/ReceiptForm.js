@@ -67,7 +67,6 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
     tags: extractedData?.tags || [],
     folder_id: extractedData?.folder_id || "",
   });
-  console.log("formData:", formData);
   const [folders, setFolders] = React.useState([]);
   const [newTag, setNewTag] = React.useState("");
 

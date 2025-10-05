@@ -16,7 +16,9 @@ import {
   FileText,
   Trash2,
 } from "lucide-react";
-// import { Receipt } from "@/entities/Receipt";
+import useReceipts from "@/hooks/use-receipts";
+import ReceiptForm from "@/app/components/upload/ReceiptForm";
+import { useUserClient } from "@/providers/UserProvider";
 import {
   Table,
   TableBody,
@@ -33,18 +35,45 @@ export default function ReceiptDetailsModal({
   onDelete,
 }) {
   const [isDeleting, setIsDeleting] = React.useState(false);
+  const [showConfirm, setShowConfirm] = React.useState(false);
+  const [editMode, setEditMode] = React.useState(false);
+  const [isUpdating, setIsUpdating] = React.useState(false);
+  const { deleteReceipt } = useReceipts();
+  const { updateReceipt } = useReceipts();
+  const userClient = useUserClient();
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this receipt?")) return;
     setIsDeleting(true);
     try {
-      await Receipt.delete(receipt.id);
-      onDelete();
-      onClose();
+      const result = await deleteReceipt(receipt.id);
+      if (result?.error) {
+        console.error("Delete failed:", result.error);
+      } else {
+        onDelete && onDelete();
+        onClose && onClose();
+      }
     } catch (error) {
       console.error("Error deleting receipt:", error);
     }
     setIsDeleting(false);
+    setShowConfirm(false);
+  };
+
+  const handleUpdate = async (formData) => {
+    setIsUpdating(true);
+    try {
+      const result = await updateReceipt(receipt.id, formData);
+      if (result?.error) {
+        console.error("Update failed:", result.error);
+      } else {
+        await userClient.refresh();
+        onClose && onClose();
+      }
+    } catch (err) {
+      console.error("Error updating receipt:", err);
+    }
+    setIsUpdating(false);
+    setEditMode(false);
   };
 
   if (!receipt) return null;
@@ -56,7 +85,14 @@ export default function ReceiptDetailsModal({
           <DialogTitle className="text-2xl font-bold text-foreground">Receipt Details</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 mt-4">
+        {editMode ? (
+          <ReceiptForm
+            extractedData={receipt}
+            onSave={handleUpdate}
+            onCancel={() => setEditMode(false)}
+          />
+        ) : (
+          <div className="space-y-6 mt-4">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-3">
@@ -209,17 +245,42 @@ export default function ReceiptDetailsModal({
 
           <div className="flex justify-end gap-3 pt-4 border-t border-subtle">
             <Button
+              variant="ghost"
+              onClick={() => setEditMode(true)}
+              disabled={isDeleting || isUpdating}
+              className="border-subtle"
+            >
+              Edit Receipt
+            </Button>
+            <Button
               variant="outline"
-              onClick={handleDelete}
+              onClick={() => setShowConfirm(true)}
               disabled={isDeleting}
               className="text-red-600 border-red-200 hover:bg-red-50"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Delete Receipt
             </Button>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose} disabled={isUpdating || isDeleting}>Close</Button>
           </div>
+
+          {showConfirm && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div className="bg-black/40 fixed inset-0" onClick={() => setShowConfirm(false)} />
+              <div className="bg-card p-6 rounded-lg shadow-lg z-10 w-full max-w-md">
+                <h3 className="text-lg font-semibold mb-2">Confirm Delete</h3>
+                <p className="text-sm text-muted mb-4">Are you sure you want to delete this receipt? This action cannot be undone.</p>
+                <div className="flex justify-end gap-3">
+                  <Button variant="outline" onClick={() => setShowConfirm(false)}>Cancel</Button>
+                  <Button className="bg-red-600 text-white" onClick={handleDelete} disabled={isDeleting}>
+                    {isDeleting ? 'Deleting...' : 'Delete'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
+        )}
       </DialogContent>
     </Dialog>
   );
