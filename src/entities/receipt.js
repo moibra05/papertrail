@@ -186,31 +186,11 @@ export const geminiReceiptSchema = {
       type: Type.STRING,
       description: "Additional notes or comments",
     },
-    folder_id: {
-      type: Type.STRING,
-      description: "UUID of the folder this receipt belongs to",
-    },
-    file_url: {
-      type: Type.STRING,
-      description: "URL to the uploaded receipt file (image or PDF)",
-    },
     tags: {
       type: Type.ARRAY,
       description: "Array of text tags for organization",
       items: { type: Type.STRING },
     },
-    created_at: {
-      type: Type.STRING,
-      description: "Timestamp (ISO 8601) when the receipt was created",
-    },
-    updated_at: {
-      type: Type.STRING,
-      description: "Timestamp (ISO 8601) when the receipt was last updated",
-    },
-    user: {
-      type: Type.STRING,
-      description: "UUID of the user who owns this receipt",
-    },
   },
-  required: ["merchant", "purchase_date", "total_amount", "user"],
+  required: ["merchant", "purchase_date", "total_amount"],
 };

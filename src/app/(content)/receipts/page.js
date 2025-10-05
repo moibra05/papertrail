@@ -44,7 +44,15 @@ export default function ReceiptsPage() {
   useEffect(() => {
     setReceipts(userClient.receipts);
     setFolders(userClient.folders);
-  }, [userClient]);
+  }, [userClient, userClient.receipts, userClient.folders]);
+
+  useEffect(() => {
+    if (userClient.loading === false) {
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
+  }, [userClient.loading]);
 
   const toggleFolder = (folderId) => {
     setExpandedFolders((prev) => ({
