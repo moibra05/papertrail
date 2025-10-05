@@ -121,16 +121,6 @@ export default function UploadPage() {
           </Alert>
         )}
 
-        {processing && !extractedData && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm text-muted">
-              <span>Processing receipt...</span>
-              <span>{progress}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-        )}
-
         {!extractedData ? (
           <div className="flex flex-col gap-5">
             <div>
@@ -175,12 +165,29 @@ export default function UploadPage() {
               </div>
             </Card>
           </div>
+          {processing && !extractedData && (
+          <div className="flex justify-center">
+            <div className="w-full h-full">
+              <Card className="p-8 flex flex-col items-center justify-center bg-surface">
+                <div className="mb-4 text-center text-muted">Processing receipt...</div>
+                <div className="flex items-center justify-center">
+                  <div
+                    className="w-18 h-18 border-8 border-gray-200 border-t-blue-500 rounded-full animate-spin"
+                    aria-hidden
+                  />
+                </div>
+              </Card>
+            </div>
+          </div>
+        )}
             <div>
-              <UploadZone
-                onFileSelect={handleFileSelect}
-                dragActive={dragActive}
-                onDrag={handleDrag}
-              />
+              {!processing ? (
+                <UploadZone
+                  onFileSelect={handleFileSelect}
+                  dragActive={dragActive}
+                  onDrag={handleDrag}
+                />
+              ) : null}
             </div>
           </div>
         ) : (
