@@ -23,11 +23,11 @@ const categoryColors = {
 
 export default function RecentReceipts({ receipts, isLoading, onSelectReceipt }) {
   return (
-    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10">
-      <CardHeader className="border-b border-subtle pb-4">
+    <Card className="border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 gap-0 pb-0">
+      <CardHeader className="border-b border-accent">
         <CardTitle className="text-xl font-bold text-foreground">Recent Receipts</CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 border-accent">
         <div className="divide-y divide-subtle">
           {isLoading ? (
             Array(5).fill(0).map((_, i) => (
@@ -50,7 +50,7 @@ export default function RecentReceipts({ receipts, isLoading, onSelectReceipt })
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => onSelectReceipt(receipt)}
-                className="p-4 hover:bg-input/10 cursor-pointer transition-colors duration-200"
+                className="p-4 hover:bg-input/10 cursor-pointer transition-colors duration-200 border-accent"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex-1 min-w-0">
@@ -81,7 +81,7 @@ export default function RecentReceipts({ receipts, isLoading, onSelectReceipt })
                     {receipt.category?.replace(/_/g, ' ')}
                   </Badge>
                   {receipt.payment_method && (
-                    <Badge variant="outline" className="text-xs border-subtle">
+                    <Badge variant="outline" className="text-xs border-muted-foreground">
                       {receipt.payment_method.replace(/_/g, ' ')}
                     </Badge>
                   )}
