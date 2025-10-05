@@ -11,6 +11,7 @@ import ReceiptForm from "../../components/upload/ReceiptForm";
 import { useReceiptExtraction } from "@/hooks/use-receipt-extraction";
 import { useReceiptPost } from "@/hooks/use-receipt-post";
 import { isAllowedReceiptFile } from "@/utils/shared";
+import { useUserClient } from "@/providers/UserProvider";
 
 export default function UploadPage() {
   const [dragActive, setDragActive] = useState(false);
@@ -26,6 +27,7 @@ export default function UploadPage() {
   } = useReceiptExtraction();
   const { postReceipt } = useReceiptPost();
   const router = useRouter();
+  const userClient = useUserClient();
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -80,6 +82,7 @@ export default function UploadPage() {
     try {
       await postReceipt(formData);
       setSuccess("Receipt saved successfully!");
+      userClient.refresh();
       setTimeout(() => {
         router.push("/receipts");
       }, 1500);

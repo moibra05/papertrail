@@ -9,7 +9,7 @@ export default function StatsCard({ title, value, icon: Icon, gradient, trend })
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="relative overflow-hidden border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 hover:shadow-xl transition-shadow duration-300">
+      <Card className="relative overflow-hidden border-0 bg-surface backdrop-blur-sm shadow-lg dark:shadow-gray-500/10 hover:shadow-xl transition-shadow duration-300 h-full">
         <div className={`absolute top-0 right-0 w-full h-19 bg-gradient-to-br ${gradient} opacity-10`} />
         <div className="p-6 relative">
           <div className="flex justify-between items-start mb-4">
