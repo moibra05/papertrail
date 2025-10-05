@@ -34,7 +34,7 @@ export default function Home() {
     const thisYear = new Date().getFullYear();
     return receipts
       .filter((r) => {
-        const d = new Date(r.date);
+        const d = new Date(r.purchase_date);
         return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
       })
       .reduce((sum, r) => sum + r.total_amount, 0);
@@ -85,7 +85,7 @@ export default function Home() {
                 ? `${
                     receipts.filter(
                       (r) =>
-                        new Date(r.date).getMonth() === new Date().getMonth()
+                        new Date(r.purchase_date).getMonth() === new Date().getMonth()
                     ).length
                   } receipts`
                 : ""

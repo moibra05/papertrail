@@ -20,7 +20,7 @@ export default function SpendingChart({ receipts }) {
   const getMonthlyData = () => {
     const monthlyTotals = {};
     receipts.forEach(receipt => {
-      const month = new Date(receipt.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      const month = new Date(receipt.purchase_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
       monthlyTotals[month] = (monthlyTotals[month] || 0) + receipt.total_amount;
     });
     

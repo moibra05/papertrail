@@ -57,7 +57,7 @@ export default function AnalyticsPage() {
     if (timeRange === "month") cutoff.setMonth(now.getMonth() - 1);
     if (timeRange === "3months") cutoff.setMonth(now.getMonth() - 3);
     if (timeRange === "year") cutoff.setFullYear(now.getFullYear() - 1);
-    return receipts.filter((r) => new Date(r.date) >= cutoff);
+    return receipts.filter((r) => new Date(r.purchase_date) >= cutoff);
   };
 
   const filteredReceipts = filterByTimeRange(receipts);
@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
   const getMonthlyTrend = () => {
     const monthlyTotals = {};
     filteredReceipts.forEach((r) => {
-      const month = new Date(r.date).toLocaleDateString("en-US", {
+      const month = new Date(r.purchase_date).toLocaleDateString("en-US", {
         month: "short",
         year: "2-digit",
       });

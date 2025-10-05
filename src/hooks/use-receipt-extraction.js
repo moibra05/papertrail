@@ -14,12 +14,13 @@ export function useReceiptExtraction() {
       formData.append("raw_receipt", file);
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/receipts`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/receipts-extract`,
         {
           method: "POST",
           body: formData,
         }
       );
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -56,7 +56,7 @@ export default function RecentReceipts({ receipts, isLoading, onSelectReceipt })
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-foreground truncate">{receipt.merchant}</h4>
                     <p className="text-sm text-muted">
-                      {format(new Date(receipt.created_at), "MMM d, yyyy")}
+                      {format(new Date(receipt.purchase_date), "MMM d, yyyy")}
                     </p>
                   </div>
                   <div className="text-right ml-4">
