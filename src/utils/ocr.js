@@ -7,7 +7,7 @@ import { geminiReceiptSchema, receiptSchema } from "@/entities/receipt";
 import { isAllowedReceiptFile } from "./shared";
 
 const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PRIVATE_GEMINI_API_KEY });
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-2.5-pro";
 const PROMPT = `
 You are a receipt extraction AI.
 

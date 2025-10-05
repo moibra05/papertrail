@@ -27,7 +27,6 @@ export function useReceiptExtraction() {
       }
 
       const data = await response.json();
-      console.log(data);
       if (!hasNonBlankValue(data)) {
         throw new Error(`Parsing Error: Is the file a valid receipt?`);
       }

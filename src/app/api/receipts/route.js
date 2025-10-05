@@ -20,7 +20,6 @@ export async function POST(request) {
 
     if (contentType.includes("application/json")) {
       const body = await request.json();
-      console.log(body);
       // validate required fields
       const { merchant, purchase_date, total_amount } = body;
       if (
@@ -42,7 +41,6 @@ export async function POST(request) {
         data: { user },
         error: authError,
       } = await supabase.auth.getUser();
-      console.log("Authenticated user:", user, authError);
       if (authError || !user) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
@@ -67,7 +65,6 @@ export async function POST(request) {
         tags: body.tags || null,
         user: userId,
       };
-      console.log("Inserting receipt with payload:", payload);
 
       const inserted = await insertReceipt(payload);
       return new Response(JSON.stringify({ receipt: inserted }), {

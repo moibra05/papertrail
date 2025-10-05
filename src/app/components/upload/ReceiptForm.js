@@ -28,6 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { createClient } from "../../../../utils/supabase/client";
 
 const CATEGORIES = [
   "food_dining",
@@ -65,22 +66,104 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
     items: extractedData?.items || [],
     notes: extractedData?.notes || "",
     tags: extractedData?.tags || [],
-    folder_id: extractedData?.folder_id || "",
+    folder_id: "",
+    file: extractedData?.file || null,
   });
   const [folders, setFolders] = React.useState([]);
   const [newTag, setNewTag] = React.useState("");
+  const [errors, setErrors] = React.useState({});
+  const supabase = createClient();
 
   React.useEffect(() => {
     loadFolders();
   }, []);
 
+  // Helper: compute sum of items totals (falls back to qty*unit_price)
+  const computeItemsSum = (items) => {
+    if (!Array.isArray(items)) return 0;
+    return items.reduce(
+      (acc, it) =>
+        acc +
+        (Number(it.total) ||
+          Number(it.quantity || 0) * Number(it.unit_price || 0)),
+      0
+    );
+  };
+
   const loadFolders = async () => {
-    const data = await Folder.list("-created_date");
-    setFolders(data);
+    const { data: folders } = await supabase.from("folders").select("*");
+    setFolders(folders || []);
   };
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    // clear field-level errors when user updates a value
+    setErrors((prev) => {
+      const next = { ...prev };
+
+      if (field === "merchant" && value && value.toString().trim()) {
+        delete next.merchant;
+      }
+
+      if (field === "purchase_date" && value) {
+        delete next.purchase_date;
+      }
+
+      // total amount: clear if numeric and > 0; also check against items sum
+      if (field === "total_amount") {
+        const totalNum = Number(value);
+        if (!Number.isNaN(totalNum) && totalNum > 0) {
+          // if items exist, only clear total error if sums match closely
+          if (formData.items && formData.items.length > 0) {
+            const itemsSum = formData.items.reduce(
+              (acc, it) =>
+                acc +
+                (Number(it.total) ||
+                  Number(it.quantity || 0) * Number(it.unit_price || 0)),
+              0
+            );
+            if (Math.abs(itemsSum - totalNum) <= 0.05) {
+              delete next.total_amount;
+            }
+          } else {
+            delete next.total_amount;
+          }
+        }
+      }
+
+      // items updated via handleChange('items', newItems) will be handled in handleItemChange
+      if (field === "items" && Array.isArray(value)) {
+        // validate items and remove items error entries if corrected
+        const itemErrors = next.items ? { ...next.items } : {};
+        value.forEach((it, idx) => {
+          const msgs = [];
+          if (!it.description || !it.description.toString().trim())
+            msgs.push("Description required");
+          if (Number.isNaN(Number(it.quantity)) || Number(it.quantity) <= 0)
+            msgs.push("Quantity must be > 0");
+          if (Number.isNaN(Number(it.unit_price)) || Number(it.unit_price) < 0)
+            msgs.push("Unit price must be >= 0");
+          if (msgs.length === 0 && itemErrors[idx]) delete itemErrors[idx];
+        });
+        if (Object.keys(itemErrors).length === 0) delete next.items;
+        else next.items = itemErrors;
+
+        // if items changed, re-check total amount mismatch
+        const itemsSum = value.reduce(
+          (acc, it) =>
+            acc +
+            (Number(it.total) ||
+              Number(it.quantity || 0) * Number(it.unit_price || 0)),
+          0
+        );
+        const totalNum = Number(formData.total_amount);
+        if (!Number.isNaN(totalNum) && Math.abs(itemsSum - totalNum) <= 0.05) {
+          delete next.total_amount;
+        }
+      }
+
+      return next;
+    });
   };
 
   const handleItemChange = (index, field, value) => {
@@ -90,11 +173,58 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
       newItems[index].total =
         (newItems[index].quantity || 0) * (newItems[index].unit_price || 0);
     }
+    // update items (this also triggers validation via handleChange)
     handleChange("items", newItems);
+    // auto-update total = items sum + tax
+    const itemsSum = computeItemsSum(newItems);
+    const tax = Number(formData.tax_amount) || 0;
+    setFormData((prev) => ({
+      ...prev,
+      total_amount: Number((itemsSum + tax).toFixed(2)),
+    }));
+    // additionally clear specific item error if it becomes valid
+    setErrors((prev) => {
+      const next = { ...prev };
+      if (next.items && next.items[index]) {
+        const it = newItems[index];
+        const msgs = [];
+        if (!it.description || !it.description.toString().trim())
+          msgs.push("Description required");
+        if (Number.isNaN(Number(it.quantity)) || Number(it.quantity) <= 0)
+          msgs.push("Quantity must be > 0");
+        if (Number.isNaN(Number(it.unit_price)) || Number(it.unit_price) < 0)
+          msgs.push("Unit price must be >= 0");
+        if (msgs.length === 0) {
+          const copy = { ...next.items };
+          delete copy[index];
+          if (Object.keys(copy).length === 0) delete next.items;
+          else next.items = copy;
+        } else {
+          next.items = { ...next.items, [index]: msgs.join(", ") };
+        }
+      }
+
+      // update total_amount error if totals now match
+      if (newItems.length > 0) {
+        const itemsSum = newItems.reduce(
+          (acc, it) =>
+            acc +
+            (Number(it.total) ||
+              Number(it.quantity || 0) * Number(it.unit_price || 0)),
+          0
+        );
+        const totalNum = Number(formData.total_amount);
+        if (!Number.isNaN(totalNum) && Math.abs(itemsSum - totalNum) <= 0.05) {
+          delete next.total_amount;
+        }
+      }
+
+      return next;
+    });
   };
 
   const addItem = () => {
-    handleChange("items", [
+    const newItems = [
       ...formData.items,
       {
         description: "",
@@ -102,14 +232,25 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
         unit_price: 0,
         total: 0,
       },
-    ]);
+    ];
+    handleChange("items", newItems);
+    const itemsSum = computeItemsSum(newItems);
+    const tax = Number(formData.tax_amount) || 0;
+    setFormData((prev) => ({
+      ...prev,
+      total_amount: Number((itemsSum + tax).toFixed(2)),
+    }));
   };
 
   const removeItem = (index) => {
-    handleChange(
-      "items",
-      formData.items.filter((_, i) => i !== index)
-    );
+    const newItems = formData.items.filter((_, i) => i !== index);
+    handleChange("items", newItems);
+    const itemsSum = computeItemsSum(newItems);
+    const tax = Number(formData.tax_amount) || 0;
+    setFormData((prev) => ({
+      ...prev,
+      total_amount: Number((itemsSum + tax).toFixed(2)),
+    }));
   };
 
   const addTag = () => {
@@ -126,26 +267,89 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
     );
   };
 
+  const validateForm = () => {
+    const errs = {};
+
+    if (!formData.merchant || !formData.merchant.toString().trim()) {
+      errs.merchant = "Merchant is required";
+    }
+
+    if (!formData.purchase_date) {
+      errs.purchase_date = "Purchase date is required";
+    }
+
+    // compute authoritative total from items + tax to avoid race conditions
+    const computedItemsSum = computeItemsSum(formData.items);
+    const computedTotal = Number(
+      (computedItemsSum + (Number(formData.tax_amount) || 0)).toFixed(2)
+    );
+    if (computedTotal < 0 || Number.isNaN(computedTotal)) {
+      errs.total_amount = "Total amount must be greater than or equal to 0";
+    }
+    // ensure the formData shows the computed total (keeps UI consistent)
+    if (Number(formData.total_amount) !== computedTotal) {
+      setFormData((prev) => ({ ...prev, total_amount: computedTotal }));
+    }
+
+    // validate items
+    const itemErrors = {};
+    let itemsSum = 0;
+    formData.items.forEach((it, idx) => {
+      const msgs = [];
+      if (!it.description || !it.description.toString().trim())
+        msgs.push("Description required");
+      if (Number.isNaN(Number(it.quantity)) || Number(it.quantity) <= 0)
+        msgs.push("Quantity must be > 0");
+      if (Number.isNaN(Number(it.unit_price)) || Number(it.unit_price) < 0)
+        msgs.push("Unit price must be >= 0");
+      if (msgs.length) itemErrors[idx] = msgs.join(", ");
+      itemsSum +=
+        Number(it.total) ||
+        Number(it.quantity || 0) * Number(it.unit_price || 0);
+    });
+    if (Object.keys(itemErrors).length) errs.items = itemErrors;
+
+    // if items exist, the computed total already reflects itemsSum + tax, so no mismatch error
+    // (we updated formData.total_amount above to the computed value)
+
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      onSave(formData);
+    } else {
+      // focus first error (optional)
+      const firstKey = Object.keys(errors)[0];
+      if (firstKey === "merchant") {
+        const el = document.getElementById("merchant");
+        el?.focus();
+      }
+    }
+  };
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
       <Card className="border-0 bg-surface backdrop-blur-sm shadow-xl">
         <CardHeader className="border-b ">
-          <CardTitle className="text-2xl font-bold text-foreground">Review & Edit Receipt</CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground">
+            Review & Edit Receipt
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="merchant">Merchant *</Label>
-                <Input
+              <Input
                 id="merchant"
                 value={formData.merchant}
                 onChange={(e) => handleChange("merchant", e.target.value)}
                 placeholder="Store or business name"
                 className=""
               />
+              {errors.merchant && (
+                <p className="text-sm text-red-600">{errors.merchant}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -154,21 +358,26 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 id="purchase_date"
                 type="date"
                 value={formData.purchase_date}
-                onChange={(e) => handleChange('purchase_date', e.target.value)}
+                onChange={(e) => handleChange("purchase_date", e.target.value)}
                 className="border-subtle"
               />
+              {errors.purchase_date && (
+                <p className="text-sm text-red-600">{errors.purchase_date}</p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="total_amount">Total Amount *</Label>
+              <Label htmlFor="total_amount">Total Amount (Read Only) *</Label>
               <Input
                 id="total_amount"
                 type="number"
-                step="0.01"
                 value={formData.total_amount}
-                onChange={(e) => handleChange('total_amount', parseFloat(e.target.value))}
+                readOnly
                 className=""
               />
+              {errors.total_amount && (
+                <p className="text-sm text-red-600">{errors.total_amount}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -178,14 +387,26 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                 type="number"
                 step="0.01"
                 value={formData.tax_amount}
-                onChange={(e) => handleChange('tax_amount', parseFloat(e.target.value))}
+                onChange={(e) => {
+                  const tax = Number(parseFloat(e.target.value)) || 0;
+                  // update tax and recompute total
+                  handleChange("tax_amount", tax);
+                  const itemsSum = computeItemsSum(formData.items);
+                  setFormData((prev) => ({
+                    ...prev,
+                    total_amount: Number((itemsSum + tax).toFixed(2)),
+                  }));
+                }}
                 className=""
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
-              <Select value={formData.category} onValueChange={(value) => handleChange('category', value)}>
+              <Select
+                value={formData.category}
+                onValueChange={(value) => handleChange("category", value)}
+              >
                 <SelectTrigger className=" bg-surface">
                   <SelectValue />
                 </SelectTrigger>
@@ -203,7 +424,10 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
 
             <div className="space-y-2">
               <Label htmlFor="payment_method">Payment Method</Label>
-              <Select value={formData.payment_method} onValueChange={(value) => handleChange('payment_method', value)}>
+              <Select
+                value={formData.payment_method}
+                onValueChange={(value) => handleChange("payment_method", value)}
+              >
                 <SelectTrigger className=" bg-surface">
                   <SelectValue placeholder="Select method" />
                 </SelectTrigger>
@@ -221,7 +445,10 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
 
             <div className="space-y-2">
               <Label htmlFor="folder">Folder (Optional)</Label>
-              <Select value={formData.folder_id} onValueChange={(value) => handleChange('folder_id', value)}>
+              <Select
+                value={formData.folder_id}
+                onValueChange={(value) => handleChange("folder_id", value)}
+              >
                 <SelectTrigger className=" bg-surface">
                   <SelectValue placeholder="Select a folder" />
                 </SelectTrigger>
@@ -277,7 +504,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                     {formData.items.map((item, index) => (
                       <TableRow key={index} className="hover:bg-black/5">
                         <TableCell>
-                            <Input
+                          <Input
                             value={item.description}
                             onChange={(e) =>
                               handleItemChange(
@@ -288,12 +515,23 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                             }
                             placeholder="Item"
                           />
+                          {errors.items && errors.items[index] && (
+                            <p className="text-xs text-red-600">
+                              {errors.items[index]}
+                            </p>
+                          )}
                         </TableCell>
                         <TableCell>
                           <Input
                             type="number"
                             value={item.quantity}
-                            onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "quantity",
+                                parseFloat(e.target.value)
+                              )
+                            }
                           />
                         </TableCell>
                         <TableCell>
@@ -301,7 +539,13 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                             type="number"
                             step="0.01"
                             value={item.unit_price}
-                            onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))}
+                            onChange={(e) =>
+                              handleItemChange(
+                                index,
+                                "unit_price",
+                                parseFloat(e.target.value)
+                              )
+                            }
                           />
                         </TableCell>
                         <TableCell>
@@ -310,7 +554,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
                           </p>
                         </TableCell>
                         <TableCell>
-                            <Button
+                          <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => removeItem(index)}
@@ -371,7 +615,7 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
             Cancel
           </Button>
           <Button
-            onClick={() => onSave(formData)}
+            onClick={handleSubmit}
             className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white shadow-lg dark:shadow-gray-500/10"
           >
             <Save className="w-4 h-4 mr-2" />

@@ -7,7 +7,6 @@ export function useReceiptPost() {
   const postReceipt = async (receiptData) => {
     setIsLoading(true);
     setError(null);
-    console.log(receiptData)
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/receipts`, {
