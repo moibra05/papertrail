@@ -16,6 +16,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -174,21 +181,28 @@ export function FolderModalProvider({ children }) {
                   <FormItem>
                     <FormLabel>Parent Folder</FormLabel>
                     <FormControl>
-                      <select
-                        {...field}
-                        className="w-full border rounded px-3 py-2 bg-white"
+                      <Select
+                        value={field.value ? String(field.value) : "__none"}
+                        onValueChange={(v) =>
+                          field.onChange(v === "__none" ? null : v)
+                        }
                       >
-                        <option value="">No parent</option>
-                        {userClient.folders
-                          .filter(
-                            (f) => !editingFolder || f.id !== editingFolder.id
-                          )
-                          .map((f) => (
-                            <option key={f.id} value={f.id}>
-                              {f.name}
-                            </option>
-                          ))}
-                      </select>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="No parent" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="__none">No parent</SelectItem>
+                          {userClient.folders
+                            .filter(
+                              (f) => !editingFolder || f.id !== editingFolder.id
+                            )
+                            .map((f) => (
+                              <SelectItem key={f.id} value={String(f.id)}>
+                                {f.name}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
