@@ -17,7 +17,7 @@ You are a receipt extraction AI.
   "error": "No valid receipt found"
 }
 
-Respond with empty fields if it is classified as a receipt and partial info is found.
+Respond with empty fields if it is classified as a receipt and partial info is found. For items, include discounts as a negative-priced item.
 `;
 
 export async function extractReceipt(file) {

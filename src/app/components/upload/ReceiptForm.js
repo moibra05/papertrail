@@ -300,8 +300,8 @@ export default function ReceiptForm({ extractedData, onSave, onCancel }) {
         msgs.push("Description required");
       if (Number.isNaN(Number(it.quantity)) || Number(it.quantity) <= 0)
         msgs.push("Quantity must be > 0");
-      if (Number.isNaN(Number(it.unit_price)) || Number(it.unit_price) < 0)
-        msgs.push("Unit price must be >= 0");
+      if (Number.isNaN(Number(it.unit_price)))
+        msgs.push("Unit price must be a number");
       if (msgs.length) itemErrors[idx] = msgs.join(", ");
       itemsSum +=
         Number(it.total) ||
