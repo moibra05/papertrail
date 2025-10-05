@@ -26,6 +26,30 @@ export async function extractReceipt(file) {
       throw new Error(`File type ${file.type} is not supported.`);
     }
 
+    // Handle .eml files differently - read as text instead of file upload
+    if (file.type === 'message/rfc822' || file.name?.endsWith('.eml')) {
+      const emailText = await file.text();
+      
+      const response = await ai.models.generateContent({
+        model: MODEL,
+        contents: createUserContent([
+          emailText,
+          PROMPT,
+        ]),
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: geminiReceiptSchema,
+        },
+      });
+
+      const result = JSON.parse(response.text || "{}");
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      return result;
+    }
+
+    // Handle other file types (images, PDFs) with file upload
     const newFile = await ai.files.upload({
       file,
       config: { mimeType: file.type },

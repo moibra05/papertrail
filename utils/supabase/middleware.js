@@ -52,7 +52,7 @@ export async function updateSession(request) {
 
   // if the user is authenticated, prevent access to public auth routes
 
-  if (user && publicPaths.includes(request.nextUrl.pathname)) {
+  if (user && publicPaths.includes(request.nextUrl.pathname) && request.nextUrl.pathname !== "/") {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     const redirectResponse = NextResponse.redirect(url);

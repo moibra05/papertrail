@@ -110,7 +110,7 @@ export default function FolderDetailsClient({
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100 bg-white/80 backdrop-blur-sm shadow-lg overflow-hidden rounded-lg">
+          <div className="divide-y divide-accent bg-background backdrop-blur-sm shadow-lg overflow-hidden rounded-lg">
             {receipts.map((r) => (
               <ReceiptListItem key={r.id} receipt={r} onClick={() => {}} />
             ))}

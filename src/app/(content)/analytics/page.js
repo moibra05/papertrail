@@ -26,6 +26,7 @@ import {
 } from "recharts";
 import { TrendingUp, DollarSign, Calendar, ShoppingBag } from "lucide-react";
 import StatCard from "../../components/dashboard/StatCards";
+import { useUserClient } from "@/providers/UserProvider";
 
 const COLORS = [
   "#6366F1",
@@ -40,15 +41,12 @@ const COLORS = [
 export default function AnalyticsPage() {
   const [receipts, setReceipts] = useState([]);
   const [timeRange, setTimeRange] = useState("all");
+  const user = useUserClient();
 
   useEffect(() => {
-    loadReceipts();
+    setReceipts(user.receipts || []);
+    console.log(receipts)
   }, []);
-
-  const loadReceipts = async () => {
-    const data = await Receipt.list("-date");
-    setReceipts(data);
-  };
 
   const filterByTimeRange = (receipts) => {
     if (timeRange === "all") return receipts;
@@ -139,7 +137,7 @@ export default function AnalyticsPage() {
           </Select>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           <StatCard
             title="Total Spending"
             value={`$${getTotalSpending().toFixed(2)}`}

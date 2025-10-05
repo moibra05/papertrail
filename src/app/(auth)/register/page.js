@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { Receipt, ChevronLeft } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -54,7 +55,25 @@ export default function SignupForm() {
           onSubmit={form.handleSubmit(register)}
           className="flex flex-col gap-8 p-8 rounded bg-secondary"
         >
-          <h2 className="">Create an Account</h2>
+          <div>
+            <div className="mb-4">
+              <Link
+                href="/"
+                className="inline-flex items-center text-sm text-muted hover:underline"
+              >
+                <ChevronLeft className="w-4 h-4 mr-2" /> Back to home
+              </Link>
+            </div>
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-xl bg-[var(--primary)] p-2 shadow-md mx-auto flex items-center justify-center text-white mb-4">
+                <Receipt className="w-7 h-7" />
+              </div>
+              <h2 className="text-2xl font-bold">Create an account</h2>
+              <p className="text-sm text-muted mt-2">
+                Start tracking receipts in seconds.
+              </p>
+            </div>
+          </div>
           <FormField
             control={form.control}
             name="email"
@@ -112,7 +131,11 @@ export default function SignupForm() {
             )}
           />
           <div className="flex flex-col gap-4">
-            <Button type="submit" size="submit">
+            <Button
+              type="submit"
+              size="submit"
+              className="w-full bg-[var(--primary)] text-white font-semibold"
+            >
               Create account
             </Button>
             <div className="flex items-center justify-center">
@@ -132,8 +155,9 @@ export default function SignupForm() {
             size="submit"
             type="button"
             onClick={handleGoogleSignIn}
+            className="w-full"
           >
-            <i className="fa-brands fa-google"></i>
+            <i className="fa-brands fa-google mr-2"></i>
             Continue with Google
           </Button>
         </form>
