@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const EMAILS_DIR = path.join(__dirname, 'emails_raw');
-const API_ENDPOINT = 'http://localhost:3000/api/process-emails';
+const API_ENDPOINT = `${process.env.NEXT_PUBLIC_BASE_URL}/api/process-emails`;
 
 async function processEmlFiles() {
     try {
