@@ -6,74 +6,41 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  REGISTRY: papertrailr.azurecr.io
+  REGISTRY_NAME: papertrailr
+  IMAGE_NAME: papertrail
+  TAG: latest
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-      NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
-      NEXT_PRIVATE_GEMINI_API_KEY: ${{ secrets.NEXT_PRIVATE_GEMINI_API_KEY }}
+  build-and-deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        - name: Log in to Azure
+          uses: azure/login@v2
+          with:
+            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID}}
+            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
+        - name: Log in to Azure Container Registry
+          run: az acr login --name ${{ env.REGISTRY_NAME }}
 
-      - name: Install dependencies
-        run: npm ci
+        - name: Build and Push Docker image
+          run: |
+            docker build -t ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} .
+            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
-      - name: Build Next.js app
-        run: npm run build
+        - name: Deploy to Azure Web App
+          uses: azure/webapps-deploy@v3
+          with:
+            app-name: ${{ secrets.WEBAPP_NAME }}
+            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-      - name: Prepare app for deployment
-        run: |
-          npm prune --production
-          zip -r app.zip . -x "*.git*" "node_modules/*"
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: nextjs-app
-          path: app.zip
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write
-      contents: read
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-      NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
-      NEXT_PRIVATE_GEMINI_API_KEY: ${{ secrets.NEXT_PRIVATE_GEMINI_API_KEY }}
-
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: nextjs-app
-          path: .
-
-      - name: Unzip artifact
-        run: unzip app.zip
-
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C3032BD0E7994EE5BE3136FFC8DF93DD }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C7DBC658F98F4B2F9897A655D56769EB }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8BC8232182964DA6946F7B48261482B4 }}
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: papertrail
-          slot-name: Production
-          package: .
-
+        - name: AZ CLI logout
+          if: always()
+          run: |
+            az logout
