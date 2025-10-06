@@ -22,16 +22,16 @@ jobs:
         - name: Log in to Azure
           uses: azure/login@v2
           with:
-            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID}}
-            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C3032BD0E7994EE5BE3136FFC8DF93DD }}
+            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C7DBC658F98F4B2F9897A655D56769EB }}
+            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8BC8232182964DA6946F7B48261482B4 }}
 
         - name: Log in to Azure Container Registry
           run: az acr login --name ${{ env.REGISTRY_NAME }}
 
         - name: Build and Push Docker image
           run: |
-            docker build -t ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} .
+            docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} .
             docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
         - name: Deploy to Azure Web App
