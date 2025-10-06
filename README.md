@@ -32,6 +32,7 @@ We wanted to solve that by creating a **smart, automated system** that could col
 
 ### 🧠 AI
 - **Gemini 2.5 Flash** for OCR and structured text extraction
+<img width="1916" height="903" alt="image" src="https://github.com/user-attachments/assets/4d498986-6021-4777-887e-b65edc2743e7" />
 <img width="1892" height="903" alt="image" src="https://github.com/user-attachments/assets/a4e4bfde-cbdd-4524-b16d-4c9293d8b728" />
 
 
