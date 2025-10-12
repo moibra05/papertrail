@@ -1,9 +1,12 @@
+"use client";
+
 import { createClient } from "../../utils/supabase/client";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function useAuth() {
   const supabase = createClient();
+  const router = useRouter();
 
   async function login(formValues) {
     const { email, password } = formValues;
@@ -19,7 +22,7 @@ export function useAuth() {
       toast.error(`Login failed. ${error.message}`);
       console.error("Login error:", error.message);
     } else {
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
   }
 
@@ -40,7 +43,7 @@ export function useAuth() {
       toast.success(
         "Account created successfully! Please check your email to verify your account."
       );
-      redirect("/login");
+      router.push("/login");
     }
   }
 
@@ -48,7 +51,7 @@ export function useAuth() {
     const { error } = await supabase.auth.signOut();
     if (!error) {
       toast.success("Logged out.");
-      redirect("/login");
+      router.push("/login");
     }
     return { error };
   }
