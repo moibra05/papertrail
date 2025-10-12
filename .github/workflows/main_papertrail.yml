@@ -1,4 +1,4 @@
-name: Build and Deploy Next.js App to Azure Web App - papertrail
+name: Build and Push Docker Image to AWS ECR
 
 on:
   push:
@@ -7,50 +7,40 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY: papertrailr.azurecr.io
-  REGISTRY_NAME: papertrailr
-  IMAGE_NAME: papertrail
-  TAG: latest
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: papertrail
+  IMAGE_TAG: latest
 
 permissions:
-  id-token: write #This is required for azure/login
-  contents: read #This is required for actions/checkout
-  
+  id-token: write
+  contents: read
+
 jobs:
-  build-and-deploy:
-      runs-on: ubuntu-latest
+  build-and-push:
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-        - name: Log in to Azure
-          uses: azure/login@v2
-          with:
-            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C3032BD0E7994EE5BE3136FFC8DF93DD }}
-            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C7DBC658F98F4B2F9897A655D56769EB }}
-            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8BC8232182964DA6946F7B48261482B4 }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
-        - name: Log in to Azure Container Registry
-          run: az acr login --name ${{ env.REGISTRY_NAME }}
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-        - name: Create .env file
-          run: |
-            echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env
-            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env
 
-        - name: Build and Push Docker image
-          run: |
-            docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} .
-            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
-
-        - name: Deploy to Azure Web App
-          uses: azure/webapps-deploy@v3
-          with:
-            app-name: ${{ secrets.WEBAPP_NAME }}
-            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-
-        - name: AZ CLI logout
-          if: always()
-          run: |
-            az logout
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker build -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
+          docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
